@@ -1,0 +1,220 @@
+/* Modal Wrapper */
+.modal {
+  display: flex; /* Dùng Flexbox để căn giữa */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Nền tối hơn nhưng nhẹ nhàng */
+  z-index: 1050;
+  overflow: auto;
+  transition: opacity 0.4s ease-in-out;
+  visibility: visible; /* Đảm bảo modal luôn hiển thị */
+}
+
+/* Modal Dialog */
+.modal-dialog {
+  position: relative; /* Không dùng fixed, để tránh vấn đề lệch */
+  max-width: 1000px; /* Cải thiện kích thước modal cho các màn hình lớn */
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out; /* Animation vào modal */
+}
+
+/* Modal Content */
+.modal-content {
+  padding: 30px;
+  border-radius: 15px;
+  background: #f9f9f9; /* Màu nền nhẹ nhàng */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out; /* Thêm hiệu ứng fade in cho nội dung */
+}
+
+/* Các phần khác giữ nguyên... */
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 15px;
+}
+
+
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  text-transform: capitalize;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Close Button */
+.close {
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #e60000;
+  transform: rotate(90deg); /* Thêm hiệu ứng quay khi hover */
+}
+
+/* Modal Body */
+.modal-body {
+  padding-top: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+  font-family: 'Roboto', sans-serif;
+  color: #555;
+}
+
+/* Product Image */
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Product Description */
+.modal-body p {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  line-height: 1.6;
+  max-height: 200px;
+  overflow-y: auto;
+  text-overflow: ellipsis;
+}
+
+/* Price */
+.modal-body p:first-child {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ff6f61; /* Tông màu nhẹ nhàng, ấm áp */
+  margin-bottom: 15px;
+}
+
+/* Size Selection */
+.product__details__option__size {
+  margin-top: 20px;
+}
+
+.product__details__option__size span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.product__details__option__size label {
+  margin-right: 15px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.product__details__option__size label:hover {
+  color: #007bff;
+  transform: translateY(-5px); /* Thêm hiệu ứng dịch chuyển khi hover */
+}
+
+.product__details__option__size .active {
+  color: #007bff;
+  font-weight: 700;
+}
+
+/* Quantity Input */
+.modal-body input[type="number"] {
+  width: 80px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 1.1rem;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-body input[type="number"]:focus {
+  border-color: #ff6f61; /* Màu nhấn nhẹ nhàng khi focus */
+  box-shadow: 0 0 10px rgba(255, 111, 97, 0.6);
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 2px solid #e0e0e0;
+}
+
+/* Footer Buttons */
+.modal-footer button {
+  margin-left: 10px;
+  font-size: 1.1rem;
+  padding: 12px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.modal-footer button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: #ff6f61; /* Màu ấm áp cho nút chính */
+  border-color: #ff6f61;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #e55d4f;
+  border-color: #e55d4f;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #757575;
+  border-color: #757575;
+}
+
+/* Keyframe Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,59 @@
+.notification {
+  position: fixed;
+  top: 20px; /* Khoảng cách từ trên */
+  right: 20px; /* Khoảng cách từ bên phải */
+  width: 300px; /* Kích thước cố định cho notification */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 16px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideIn 0.3s forwards, fadeOut 0.5s 3s forwards;
+  z-index: 9999; /* Đảm bảo notification nằm trên cùng */
+}
+
+.notification-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-content p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.notification-content button {
+  background: none;
+  border: none;
+  color: #ff5252;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.notification-content button:hover {
+  color: #ff7373;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

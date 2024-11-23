@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Danh Mục - Web Bán Hàng Thời Trang</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/admin/category">Dashboard</a></li>
+            <li><a href="/admin/products">Sản phẩm</a></li>
+            <li><a href="/admin/orders">Đơn hàng</a></li>
+            <li><a href="/admin/customers">Khách hàng</a></li>
+            <li><a href="/admin/reports">Thống kê</a></li>
+            <li><a href="/logout">Đăng xuất</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="logo">Admin - Web Thời Trang</div>
+            <div class="user-info">
+                <span>Chào, Admin</span>
+                <span><a href="/logout">Đăng xuất</a></span>
+            </div>
+        </div>
+        <app-preloader [isLoading]="isLoading"></app-preloader>
+        <app-notification [showNotification]="showNotification" [message]="message"
+            (closeNotification)="showNotification"></app-notification>
+
+        <!-- Category Management -->
+        <div class="container">
+            <!-- Tiêu đề và nút Thêm -->
+            <div class="header">
+                <h2>Quản lý danh mục</h2>
+                <button (click)="showModal('create')">Thêm danh mục mới</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal" [class.active]="modalType">
+                <div class="modal-content">
+                    <span class="close" (click)="closeModal()">&times;</span>
+
+                    <!-- Thêm danh mục -->
+                    <ng-container *ngIf="modalType === 'create'">
+                        <h3>Thêm danh mục</h3>
+                        <form (ngSubmit)="createCategory()">
+                            <label for="name">Tên danh mục:</label>
+                            <input type="text" id="name" [(ngModel)]="categoryForm.name" name="name" required>
+                            <button type="submit">Thêm</button>
+                        </form>
+                    </ng-container>
+
+                    <!-- Sửa danh mục -->
+                    <ng-container *ngIf="modalType === 'update'">
+                        <h3>Sửa danh mục</h3>
+                        <form (ngSubmit)="updateCategory()">
+                            <label for="name">Tên danh mục:</label>
+                            <input type="text" id="name" [(ngModel)]="categoryForm.name" name="name" required>
+                            <button type="submit">Cập nhật</button>
+                        </form>
+                    </ng-container>
+
+                    <!-- Xóa danh mục -->
+                    <ng-container *ngIf="modalType === 'delete'">
+                        <h3>Xóa danh mục</h3>
+                        <p>Bạn có chắc chắn muốn xóa danh mục "{{ categoryForm.name }}" không?</p>
+                        <button (click)="deleteCategory()">Xóa</button>
+                        <button (click)="closeModal()">Hủy</button>
+                    </ng-container>
+                </div>
+            </div>
+            <!-- Danh sách danh mục -->
+            <div style="max-height: 450px; overflow: auto;" class="category-list-container">
+                <table *ngIf="listCategory && listCategory.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Tên danh mục</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let category of listCategory">
+                            <td>{{ category.name }}</td>
+                            <td>
+                                <button style="background-color: #ffc107; color: white;" (click)="showModal('update', category)">Sửa</button>
+                                <button style="background-color: #dc3545; color: white;;" (click)="showModal('delete', category)">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

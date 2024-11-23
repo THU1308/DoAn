@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giao diện Admin - Web Bán Hàng Thời Trang</title>
+ 
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/admin/category">Dashboard</a></li>
+      <li><a href="/admin/products">Sản phẩm</a></li>
+      <li><a href="/admin/orders">Đơn hàng</a></li>
+      <li><a href="/admin/customers">Khách hàng</a></li>
+      <li><a href="/admin/reports">Thống kê</a></li>
+      <li><a href="/logout">Đăng xuất</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="logo">Admin - Web Thời Trang</div>
+      <div class="user-info">
+        <span>Chào, Admin</span>
+        <span><a href="/logout">Đăng xuất</a></span>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+      <div class="stat-card">
+        <h3>Tổng số đơn hàng</h3>
+        <p>102</p>
+      </div>
+      <div class="stat-card">
+        <h3>Tổng doanh thu</h3>
+        <p>15,000,000 VND</p>
+      </div>
+      <div class="stat-card">
+        <h3>Sản phẩm bán chạy</h3>
+        <p>Áo thun nam</p>
+      </div>
+    </div>
+
+    <!-- Product Management -->
+    <div class="product-management">
+      <h2>Danh sách Sản phẩm</h2>
+      <button class="btn-add">Thêm sản phẩm mới</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Áo thun nam</td>
+            <td>200,000 VND</td>
+            <td>Áo</td>
+            <td>
+              <button class="btn-edit">Sửa</button>
+              <button class="btn-delete">Xóa</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Quần jean</td>
+            <td>300,000 VND</td>
+            <td>Quần</td>
+            <td>
+              <button class="btn-edit">Sửa</button>
+              <button class="btn-delete">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/admin/category">Dashboard</a></li>
+            <li><a href="/admin/products">Sản phẩm</a></li>
+            <li><a href="/admin/orders">Đơn hàng</a></li>
+            <li><a href="/admin/customers">Khách hàng</a></li>
+            <li><a href="/admin/reports">Thống kê</a></li>
+            <li><a href="/logout">Đăng xuất</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="logo">Admin - Web Thời Trang</div>
+            <div class="user-info">
+                <span>Chào, Admin</span>
+                <span><a href="/logout">Đăng xuất</a></span>
+            </div>
+        </div>
+
+        <app-preloader [isLoading]="isLoading"></app-preloader>
+        <app-notification [showNotification]="showNotification" [message]="message"
+            (closeNotification)="showNotification"></app-notification>
+
+        <!-- Size Management -->
+        <div class="container">
+            <div class="header">
+              <h2>Quản lý Banner</h2>
+              <button class="btn-add" (click)="showForm()">Thêm Banner Mới</button>
+            </div>
+          
+            <!-- Modal: Thêm/Sửa Banner -->
+            <div class="modal" [class.active]="displayForm">
+              <div class="modal-content">
+                <span class="close" (click)="closeForm()">&times;</span>
+                <h3>{{ onUpdate ? 'Cập nhật Banner' : 'Thêm Banner Mới' }}</h3>
+                <form (ngSubmit)="onUpdate ? updateBanner() : createBanner()">
+                  <label for="banner-file">Hình ảnh Banner</label>
+                  <input type="file" id="banner-file" (change)="onFileChange($event)" required />
+                  <div class="preview" *ngIf="previewUrl">
+                    <img [src]="previewUrl" alt="Preview" />
+                  </div>
+                  <button type="submit" class="primary">{{ onUpdate ? 'Cập nhật' : 'Thêm' }}</button>
+                  <button type="button" class="secondary" (click)="closeForm()">Hủy</button>
+                </form>
+              </div>
+            </div>
+          
+            <!-- Xác nhận xóa -->
+            <div class="modal" [class.active]="deleteForm">
+              <div class="modal-content">
+                <span class="close" (click)="deleteForm = false">&times;</span>
+                <h3>Xác nhận xóa Banner</h3>
+                <p>Bạn có chắc chắn muốn xóa banner này?</p>
+                <button class="danger" (click)="deleteBanner()">Xóa</button>
+                <button class="secondary" (click)="deleteForm = false">Hủy</button>
+              </div>
+            </div>
+          
+            <!-- Danh sách Banner -->
+            <table>
+              <thead>
+                <tr>
+                  <th>Hình ảnh</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let banner of listBanner">
+                  <td>
+                    <img [src]="getBannerImage(banner.id)" alt="Banner" class="banner-image" />
+                  </td>
+                  <td>
+                    <button class="edit" (click)="onUpdateForm(banner.id)">Sửa</button>
+                    <button class="delete" (click)="onDelete(banner.id)">Xóa</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+    </div>
+
+</body>
+
+</html>

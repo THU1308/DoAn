@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VNPay Payment Status</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    /* Nền tổng quan */
+    body {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* Hộp nội dung chính */
+    .vnpay-container {
+      max-width: 480px;
+      width: 100%;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    /* Header tiêu đề */
+    .vnpay-header {
+      color: #0056b3;
+      font-weight: 700;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* Các biểu tượng */
+    .vnpay-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    /* Thanh toán thành công */
+    .vnpay-success .vnpay-icon {
+      color: #28a745;
+    }
+
+    /* Thanh toán thất bại */
+    .vnpay-failure .vnpay-icon {
+      color: #dc3545;
+    }
+
+    /* Nút bấm */
+    .vnpay-button {
+      background: #0056b3;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+
+    .vnpay-button:hover {
+      background: #003a7a;
+      transform: scale(1.05);
+    }
+
+    /* Hiệu ứng xuất hiện */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Spinner */
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    /* Text Loading */
+    .vnpay-loading-text {
+      font-size: 20px;
+      font-weight: 500;
+      color: #fff;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="vnpay-container">
+    <!-- Loading -->
+    <div *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="vnpay-loading-text">Đang xử lý kết quả thanh toán...</p>
+    </div>
+
+    <!-- Thanh toán thành công -->
+    <div *ngIf="!isLoading && paymentSuccess === true" class="vnpay-success">
+      <i class="bi bi-check-circle-fill vnpay-icon"></i>
+      <h2 class="vnpay-header">Thanh toán thành công!</h2>
+      <p class="fs-5">Cảm ơn bạn đã mua hàng với VNPay.</p>
+      <button class="vnpay-button" (click)="navigateHome()">Trở về trang chủ</button>
+    </div>
+
+    <!-- Thanh toán thất bại -->
+    <div *ngIf="!isLoading && paymentSuccess === false" class="vnpay-failure">
+      <i class="bi bi-x-circle-fill vnpay-icon"></i>
+      <h2 class="vnpay-header">Thanh toán thất bại!</h2>
+      <p class="fs-5">Vui lòng thử lại hoặc liên hệ hỗ trợ khách hàng.</p>
+      <button class="vnpay-button" (click)="navigateHome()">Trở về trang chủ</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
