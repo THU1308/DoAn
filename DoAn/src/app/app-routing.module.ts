@@ -17,6 +17,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminSizeComponent } from './admin-size/admin-size.component';
 import { AdminBannerComponent } from './admin-banner/admin-banner.component';
 import { AdminBlogComponent } from './admin-blog/admin-blog.component';
+import { AdminUserComponent } from './admin-user/admin-user.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }, 
@@ -36,12 +37,13 @@ const routes: Routes = [
   { path: 'admin/size', component: AdminSizeComponent},
   { path: 'admin/banner', component: AdminBannerComponent},
   { path: 'admin/blog', component: AdminBlogComponent},
+  { path: 'admin/user', component: AdminUserComponent},
   { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
 
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes)], 
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
