@@ -2,109 +2,134 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
 </head>
 
 <body>
 
-    <!-- Sidebar -->
-    <nav class="sidebar">
-        <ul>
-            <li><a href="/admin/category">Dashboard</a></li>
-            <li><a href="/admin/products">Sản phẩm</a></li>
-            <li><a href="/admin/orders">Đơn hàng</a></li>
-            <li><a href="/admin/customers">Khách hàng</a></li>
-            <li><a href="/admin/reports">Thống kê</a></li>
-            <li><a href="/logout">Đăng xuất</a></li>
-        </ul>
-    </nav>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/admin/category">Dashboard</a></li>
+      <li><a href="/admin/products">Sản phẩm</a></li>
+      <li><a href="/admin/orders">Đơn hàng</a></li>
+      <li><a href="/admin/customers">Khách hàng</a></li>
+      <li><a href="/admin/reports">Thống kê</a></li>
+      <li><a href="/logout">Đăng xuất</a></li>
+    </ul>
+  </nav>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Topbar -->
-        <div class="topbar">
-            <div class="logo">Admin - Web Thời Trang</div>
-            <div class="user-info">
-                <span>Chào, Admin</span>
-                <span><a href="/logout">Đăng xuất</a></span>
-            </div>
-        </div>
-
-        <app-preloader [isLoading]="isLoading"></app-preloader>
-        <app-notification [showNotification]="showNotification" [message]="message"
-            (closeNotification)="showNotification"></app-notification>
-
-        <!-- Size Management -->
-        <div class="container">
-            <div class="header">
-              <h2>Quản lý Blog</h2>
-              <button class="btn-add" (click)="showForm()">Thêm Blog Mới</button>
-            </div>
-          
-            <!-- Modal: Thêm/Sửa Blog -->
-            <div class="modal" [class.active]="displayForm">
-              <div class="modal-content">
-                <span class="close" (click)="closeForm()">&times;</span>
-                <h3>{{ onUpdate ? 'Cập nhật Blog' : 'Thêm Blog Mới' }}</h3>
-                <form (ngSubmit)="onUpdate ? updateBlog() : createBlog()">
-                  <label for="blog-title">Tiêu đề</label>
-                  <input type="text" id="blog-title" [(ngModel)]="blogForm.title" name="title" required />
-          
-                  <label for="blog-description">Mô tả</label>
-                  <textarea id="blog-description" [(ngModel)]="blogForm.description" name="description" required></textarea>
-          
-                  <label for="blog-content">Nội dung</label>
-                  <textarea id="blog-content" [(ngModel)]="blogForm.content" name="content" required></textarea>
-          
-                  <label for="blog-image">ID Hình ảnh</label>
-                  <input type="number" id="blog-image" [(ngModel)]="blogForm.imageId" name="imageId" required />
-          
-                  <label for="blog-tags">Tags</label>
-                  <input type="text" id="blog-tags" [(ngModel)]="blogTagsInput" (change)="updateTags()" name="tags" />
-          
-                  <button type="submit" class="primary">{{ onUpdate ? 'Cập nhật' : 'Thêm' }}</button>
-                  <button type="button" class="secondary" (click)="closeForm()">Hủy</button>
-                </form>
-              </div>
-            </div>
-          
-            <!-- Xác nhận xóa -->
-            <div class="modal" [class.active]="deleteForm">
-              <div class="modal-content">
-                <span class="close" (click)="deleteForm = false">&times;</span>
-                <h3>Xác nhận xóa Blog</h3>
-                <p>Bạn có chắc chắn muốn xóa blog này?</p>
-                <button class="danger" (click)="deleteBlog()">Xóa</button>
-                <button class="secondary" (click)="deleteForm = false">Hủy</button>
-              </div>
-            </div>
-          
-            <!-- Danh sách Blog -->
-            <table>
-              <thead>
-                <tr>
-                  <th>Tiêu đề</th>
-                  <th>Mô tả</th>
-                  <th>Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let blog of listBlog">
-                  <td>{{ blog.title }}</td>
-                  <td>{{ blog.description }}</td>
-                  <td>
-                    <button class="edit" (click)="onUpdateForm(blog.id)">Sửa</button>
-                    <button class="delete" (click)="onDelete(blog.id)">Xóa</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="logo">Admin - Web Thời Trang</div>
+      <div class="user-info">
+        <span>Chào, Admin</span>
+        <span><a href="/logout">Đăng xuất</a></span>
+      </div>
     </div>
+
+    <app-preloader [isLoading]="isLoading"></app-preloader>
+    <app-notification [showNotification]="showNotification" [message]="message"
+      (closeNotification)="showNotification"></app-notification>
+
+    <!-- Size Management -->
+    <div class="container">
+      <div class="header">
+        <h2>Quản lý Blog</h2>
+        <button class="btn-add" (click)="showForm()">Thêm Blog Mới</button>
+      </div>
+
+      <!-- Modal: Thêm/Sửa Blog -->
+      <div class="modal" [class.active]="displayForm">
+        <div class="modal-content">
+          <span class="close" (click)="closeForm()">&times;</span>
+          <h3>{{ onUpdate ? 'Cập nhật Blog' : 'Thêm Blog Mới' }}</h3>
+          <form (ngSubmit)="onUpdate ? updateBlog() : createBlog()">
+            <label for="blog-title">Tiêu đề</label>
+            <input type="text" id="blog-title" [(ngModel)]="blogForm.title" name="title" required />
+
+            <label for="blog-description">Mô tả</label>
+            <textarea id="blog-description" [(ngModel)]="blogForm.description" name="description" required></textarea>
+
+            <label for="blog-content">Nội dung</label>
+            <textarea id="blog-content" [(ngModel)]="blogForm.content" name="content" required></textarea>
+
+            <!-- Hình ảnh -->
+            <label for="blog-image">Chọn hình ảnh</label>
+            <div class="image-gallery">
+              <div 
+                *ngFor="let image of availableImages" 
+                class="image-item" 
+                [class.selected]="selectedImage?.id === image.id"
+                (click)="selectImage(image)">
+                <img [src]="'data:image/png;base64,' + image.data" alt="{{ image.id }}" width="100" height="100" />
+                <p>{{ image.name }}</p>
+              </div>
+            </div>
+            
+
+            <div *ngIf="selectedImage">
+              <h4>Hình ảnh đã chọn</h4>
+              <img [src]="'data:image/png;base64,' + selectedImage.data" alt="Selected Image" width="100"
+                height="100" />
+            </div>
+
+            <!-- Tags -->
+            <label for="blog-tags">Chọn Tags</label>
+            <select id="blog-tags" [(ngModel)]="blogForm.tags" name="tags" required>
+              <option *ngFor="let tag of availableTags" [value]="tag.id">{{ tag.name }}</option>
+            </select>
+
+            <button type="submit" class="primary">{{ onUpdate ? 'Cập nhật' : 'Thêm' }}</button>
+            <button type="button" class="secondary" (click)="closeForm()">Hủy</button>
+          </form>
+        </div>
+      </div>
+
+
+
+
+
+
+      <!-- Xác nhận xóa -->
+      <div class="modal" [class.active]="deleteForm">
+        <div class="modal-content">
+          <span class="close" (click)="deleteForm = false">&times;</span>
+          <h3>Xác nhận xóa Blog</h3>
+          <p>Bạn có chắc chắn muốn xóa blog này?</p>
+          <button class="danger" (click)="deleteBlog()">Xóa</button>
+          <button class="secondary" (click)="deleteForm = false">Hủy</button>
+        </div>
+      </div>
+
+      <!-- Danh sách Blog -->
+      <table>
+        <thead>
+          <tr>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let blog of listBlog">
+            <td>{{ blog.title }}</td>
+            <td>{{ blog.description }}</td>
+            <td>
+              <button class="edit" (click)="onUpdateForm(blog.id)">Sửa</button>
+              <button class="delete" (click)="onDelete(blog.id)">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
 
 </body>
 

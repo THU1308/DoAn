@@ -1,19 +1,19 @@
-package com.example.shopclothes.service;
+package com.Website_Selling_Clother.service.Imp;
 
-import com.example.shopclothes.dto.UserDTO;
-import com.example.shopclothes.entity.ERole;
-import com.example.shopclothes.entity.Role;
-import com.example.shopclothes.entity.User;
-import com.example.shopclothes.exception.DataNotFoundException;
-import com.example.shopclothes.repository.RoleRepository;
-import com.example.shopclothes.repository.UserRepository;
-import com.example.shopclothes.request.UserRequest;
-import com.example.shopclothes.service.Imp.IUserService;
+import com.Website_Selling_Clother.dto.UserDTO;
+import com.Website_Selling_Clother.entity.ERole;
+import com.Website_Selling_Clother.entity.Role;
+import com.Website_Selling_Clother.entity.User;
+import com.Website_Selling_Clother.exception.DataNotFoundException;
+import com.Website_Selling_Clother.repository.RoleRepository;
+import com.Website_Selling_Clother.repository.UserRepository;
+import com.Website_Selling_Clother.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {

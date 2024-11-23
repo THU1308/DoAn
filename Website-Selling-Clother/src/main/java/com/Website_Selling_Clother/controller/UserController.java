@@ -1,18 +1,20 @@
-package com.example.shopclothes.controller;
+package com.Website_Selling_Clother.controller;
 
-import com.example.shopclothes.dto.UserDTO;
-import com.example.shopclothes.entity.User;
-import com.example.shopclothes.exception.DataNotFoundException;
-import com.example.shopclothes.service.ResetPasswordService;
-import com.example.shopclothes.service.UserService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Encoders;
+import com.Website_Selling_Clother.controller.response.ResponseData;
+import com.Website_Selling_Clother.dto.UserDTO;
+import com.Website_Selling_Clother.entity.User;
+import com.Website_Selling_Clother.exception.DataNotFoundException;
+import com.Website_Selling_Clother.service.Imp.ResetPasswordService;
+import com.Website_Selling_Clother.service.Imp.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
 import java.util.List;
 
 @RestController
@@ -25,82 +27,98 @@ public class UserController {
     @Autowired
     ResetPasswordService resetPasswordService;
 
+    @GetMapping("/current-user")
+    public ResponseData<UserDetails> getCurrentUserLogin() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            System.out.println(userDetails.getUsername());
+            return new ResponseData<>(HttpStatus.OK,"Success",userDetails);
+        }
+        return null;
+    }
+
     @GetMapping("")
-    public ResponseEntity<?> getuser(@RequestParam("username") String username){
+    public ResponseData<User> getUser(@RequestParam("username") String username){
         User user = null;
         try {
             user = userService.getUserByUsername(username);
-            return ResponseEntity.ok(user);
+            return new ResponseData<>(HttpStatus.OK,"Success",user);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
 
     @GetMapping("/listUser")
-    public ResponseEntity<?> getListUser(){
+    public ResponseData<List<User>> getListUser(){
         List<User> users = null;
         try {
             users = userService.getListUser();
-            return ResponseEntity.ok(users);
+            return new ResponseData<>(HttpStatus.OK,"Success",users);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
 
     @GetMapping("/employee")
-    public ResponseEntity<?> getListEmployee(){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseData<List<User>> getListEmployee(){
         List<User> users = null;
         try {
             users = userService.getListEmployee();
-            return ResponseEntity.ok(users);
+            return new ResponseData<>(HttpStatus.OK,"Success",users);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateProfile(@RequestBody UserDTO userDTO){
-        User user = null;
-        try {
-            user = userService.updateUser(userDTO);
-            return ResponseEntity.ok(UserDTO.fromUser(user));
-        } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+//    @PutMapping("/update")
+//    public ResponseEntity<?> updateProfile(@RequestBody UserDTO userDTO){
+//        User user = null;
+//        try {
+//            user = userService.updateUser(userDTO);
+//            return ResponseEntity.ok(UserDTO.fromUser(user));
+//        } catch (DataNotFoundException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @PutMapping("/updateRole")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateRole(@RequestParam String username){
+    @Transactional
+    public ResponseData<User> updateRole(@RequestParam String username){
         User user = null;
         try {
             user = userService.updateUserRole(username);
-            return ResponseEntity.ok(UserDTO.fromUser(user));
+            return new ResponseData<>(HttpStatus.OK,"Success",user);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
     @PutMapping("/enable")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> enableEmployee(@RequestParam String username){
+    @Transactional
+    public ResponseData<User> enableEmployee(@RequestParam String username){
         User user = null;
         try {
             user = userService.enableUser(username);
-            return ResponseEntity.ok(UserDTO.fromUser(user));
+            return new ResponseData<>(HttpStatus.OK,username);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
 
     @PostMapping("/resetPw")
-    public ResponseEntity<?> resetPassword(@RequestParam String email) {
+    @Transactional
+    public ResponseData<String> resetPassword(@RequestParam String email) {
         try {
             if (resetPasswordService.sendResetPasswordEmail(email)){
-                return ResponseEntity.ok("Reset password email sent successfully");
+                return new ResponseData<>(HttpStatus.OK,"Reset password email sent successfully");
             }
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Email không tồn tại hoặc " + e.getMessage());
+            return new ResponseData<>(HttpStatus.NO_CONTENT,"Failed");
         }
-        return ResponseEntity.badRequest().body("Email không tồn tại");
+        return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
     }
 }

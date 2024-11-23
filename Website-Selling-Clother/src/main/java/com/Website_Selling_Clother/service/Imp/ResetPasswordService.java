@@ -1,8 +1,8 @@
-package com.example.shopclothes.service;
+package com.Website_Selling_Clother.service.Imp;
 
-import com.example.shopclothes.entity.User;
-import com.example.shopclothes.repository.UserRepository;
-import com.example.shopclothes.service.Imp.IResetPassword;
+import com.Website_Selling_Clother.entity.User;
+import com.Website_Selling_Clother.repository.UserRepository;
+import com.Website_Selling_Clother.service.IResetPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -53,7 +53,7 @@ public class ResetPasswordService implements IResetPassword {
     }
 
     private String generateNewPassword() {
-        // Logic để tạo mật khẩu mới (ví dụ: random)
+
         return "1234";
     }
 }

@@ -1,8 +1,10 @@
-package com.example.shopclothes.service.Imp;
+package com.Website_Selling_Clother.service;
 
-import com.example.shopclothes.dto.UserDTO;
-import com.example.shopclothes.entity.User;
-import com.example.shopclothes.exception.DataNotFoundException;
+
+
+import com.Website_Selling_Clother.dto.UserDTO;
+import com.Website_Selling_Clother.entity.User;
+import com.Website_Selling_Clother.exception.DataNotFoundException;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package com.example.shopclothes.service;
+package com.Website_Selling_Clother.service.Imp;
 
-import com.example.shopclothes.dto.TagDTO;
-import com.example.shopclothes.entity.Tag;
-import com.example.shopclothes.exception.DataNotFoundException;
-import com.example.shopclothes.repository.TagRepository;
-import com.example.shopclothes.service.Imp.ITagService;
+import com.Website_Selling_Clother.dto.TagDTO;
+import com.Website_Selling_Clother.entity.Tag;
+import com.Website_Selling_Clother.exception.DataNotFoundException;
+import com.Website_Selling_Clother.repository.TagRepository;
+import com.Website_Selling_Clother.service.ITagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

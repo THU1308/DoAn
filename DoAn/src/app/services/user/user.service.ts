@@ -14,12 +14,17 @@ export class UserService {
     listUser1 : any;
 
     private apiUrl = `${enviroment.apiBaseUrl}/login/signin`;
-
+    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     constructor(private http: HttpClient) { }
 
   login(loginDto: LoginDto): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl, loginDto, { headers, observe: 'response' })
+    const loginUrl = `${enviroment.apiBaseUrl}/login/signin`;
+    return this.http.post(loginUrl, loginDto, { headers: this.headers });
+  }
+
+  getCurrenUserLogin(){
+    const getCurrenUserLogin = `${enviroment.apiBaseUrl}/user/current-user`;
+    return this.http.get(getCurrenUserLogin,{headers:this.headers})
   }
 }

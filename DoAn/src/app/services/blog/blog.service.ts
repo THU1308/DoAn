@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { enviroment } from 'src/app/enviroment/enviroment';
+import { ImageService } from '../image/image.service';
+import { ImageDto } from 'src/app/dto/image.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private imageService : ImageService) {}
 
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+ 
+  vailableImages: ImageDto[] = [];
+  availableTags: any[] = []
   // Lấy danh sách blog
   getListBlog(): Observable<any> {
     const getListBlogUrl = `${enviroment.apiBaseUrl}/blog`;
@@ -51,6 +55,7 @@ export class BlogService {
     );
   }
 
+  
   // Xử lý lỗi HTTP
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('HTTP Error:', error);

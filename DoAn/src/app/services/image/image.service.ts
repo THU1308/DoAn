@@ -12,7 +12,7 @@ export class ImageService{
     constructor(private http: HttpClient){
     }
     headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    private getListImage = `${enviroment.apiBaseUrl}/image/6`;
+    private getListImage = `${enviroment.apiBaseUrl}/image`;
     
     getListImages():Observable<any>{
         return this.http.get(this.getListImage,{headers:this.headers})

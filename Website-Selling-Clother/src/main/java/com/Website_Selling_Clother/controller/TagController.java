@@ -1,11 +1,14 @@
-package com.example.shopclothes.controller;
+package com.Website_Selling_Clother.controller;
 
-import com.example.shopclothes.dto.TagDTO;
-import com.example.shopclothes.entity.Tag;
-import com.example.shopclothes.service.TagService;
+import com.Website_Selling_Clother.controller.response.ResponseData;
+import com.Website_Selling_Clother.dto.TagDTO;
+import com.Website_Selling_Clother.entity.Tag;
+import com.Website_Selling_Clother.service.Imp.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,50 +22,54 @@ public class TagController {
     TagService tagService;
 
     @GetMapping("")
-    public ResponseEntity<?> getListTag(){
-        return ResponseEntity.ok(tagService.getListTag());
+    public ResponseData<List<Tag>> getListTag(){
+        return new ResponseData<>(HttpStatus.OK,"Success",tagService.getListTag());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Tag> createTag(@RequestBody TagDTO tagDTO){
+    @PostMapping("")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
+    public ResponseData<Tag> createTag(@RequestBody TagDTO tagDTO){
         Tag tag = tagService.createTag(tagDTO);
         tag.setEnable(true);
-        return ResponseEntity.ok(tag);
+        return new ResponseData<>(HttpStatus.OK,"Success",tag);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateTag(@PathVariable int id,@RequestBody TagDTO tagDTO){
+    @Transactional
+    public ResponseData<Tag> updateTag(@PathVariable int id,@RequestBody TagDTO tagDTO){
         try {
             Tag tag = tagService.updateTag(id, tagDTO);
-            return ResponseEntity.ok(tag);
+            return new ResponseData<>(HttpStatus.OK,"Success",tag);
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
     }
 
     @PutMapping("/enable/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> enabled(@PathVariable int id){
+    @Transactional
+    public ResponseData<String> enabled(@PathVariable int id){
         try {
             tagService.enableTag(id);
-            return ResponseEntity.ok("Enable tag thành công");
+            return new ResponseData<>(HttpStatus.OK,"Success");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
 
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteTag(@PathVariable int id){
+    @Transactional
+    public ResponseData<String> deleteTag(@PathVariable int id){
         try {
             tagService.deleleTag(id);
-            return ResponseEntity.ok("Xóa tag thành công");
+            return new ResponseData<>(HttpStatus.OK,"Success");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed");
         }
-
     }
 
 }

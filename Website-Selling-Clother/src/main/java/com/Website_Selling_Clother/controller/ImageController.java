@@ -32,14 +32,14 @@ public class ImageController {
     public ResponseData<List<Image>> getList(){
         List<Image> listImage = Image.sortImagesDescending(imageService.getListImage());
 
-        return new ResponseData<>(HttpStatus.OK,"Success",listImage);
+        return new ResponseData<>(HttpStatus.OK,"Success",listImage.subList(1,2));
     }
 
     @GetMapping("")
     public ResponseEntity<?> getListSort(){
         List<Image> listImage = imageService.getListImage();
 
-        return  ResponseEntity.ok(listImage);
+        return  ResponseEntity.ok(listImage.subList(1,5));
     }
 
 //    @GetMapping("/{productId}/{imageId}")

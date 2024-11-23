@@ -1,12 +1,14 @@
 package com.Website_Selling_Clother.controller;
+
 import com.Website_Selling_Clother.controller.response.ResponseData;
 import com.Website_Selling_Clother.dto.BlogDTO;
 import com.Website_Selling_Clother.entity.Blog;
+import com.Website_Selling_Clother.entity.Image;
 import com.Website_Selling_Clother.exception.DataNotFoundException;
 import com.Website_Selling_Clother.service.Imp.BlogService;
+import com.Website_Selling_Clother.service.Imp.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class BlogController {
 
     @Autowired
     BlogService blogService;
+
+    @Autowired
+    ImageService imageService;
 
     @GetMapping("")
     public ResponseData<List<BlogDTO>> getListBlog(){
@@ -75,7 +80,7 @@ public class BlogController {
         Blog blog = null;
         try {
             blog = blogService.updateBlogById(id,blogDTO);
-            return new ResponseData<>(HttpStatus.OK,"Success");
+            return new ResponseData<>(HttpStatus.OK,"Success","Success");
         } catch (DataNotFoundException e) {
                 return new ResponseData<>(HttpStatus.BAD_REQUEST,e.getMessage());
         }
