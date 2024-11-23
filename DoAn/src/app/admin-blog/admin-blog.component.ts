@@ -127,6 +127,7 @@ export class AdminBlogComponent {
   }
 
   createBlog(): void {
+   
     if (!Array.isArray(this.blogForm.tags)) {
       this.blogForm.tags = [];
     }
@@ -149,6 +150,7 @@ export class AdminBlogComponent {
   }
 
   onUpdateForm(id: number): void {
+    
     this.currentBlogId = id;
     this.onUpdate = true;
     this.blogService.getBlogById(id).subscribe({
@@ -167,6 +169,7 @@ export class AdminBlogComponent {
   }
 
   updateBlog(): void {
+   
     if (!this.currentBlogId) {
       console.error('Không tìm thấy ID blog để cập nhật.');
       return;

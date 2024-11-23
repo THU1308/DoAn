@@ -73,16 +73,16 @@ public class UserController {
         }
     }
 
-//    @PutMapping("/update")
-//    public ResponseEntity<?> updateProfile(@RequestBody UserDTO userDTO){
-//        User user = null;
-//        try {
-//            user = userService.updateUser(userDTO);
-//            return ResponseEntity.ok(UserDTO.fromUser(user));
-//        } catch (DataNotFoundException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @PutMapping("/update")
+    public ResponseData<User> updateProfile(@RequestBody UserDTO userDTO){
+        User user = null;
+        try {
+            user = userService.updateUser(userDTO);
+            return new ResponseData<>(HttpStatus.OK,"Success",user);
+        } catch (DataNotFoundException e) {
+            return new ResponseData<>(HttpStatus.OK,"Failed");
+        }
+    }
 
     @PutMapping("/updateRole")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
