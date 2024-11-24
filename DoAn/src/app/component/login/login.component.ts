@@ -36,11 +36,10 @@ export class LoginComponent {
 
     this.userService.login(loginDto).subscribe({
       next: (response: any) => {
-        if (response.body.message === 'Success') {
-          this.tokenService.setToken(response.body.data.token);
-          // KHÔNG CẦN TẠO MỚI cartStore
-          // this.cartService.cartStore = `shopping_cart_${this.tokenService.getToken()}`;
-          // Cập nhật trạng thái giỏ hàng
+        debugger
+        if (response.message === 'Success') {
+          this.tokenService.setToken(response.data.token);
+          
           this.cartService.updateCartStatus();
           alert('Đăng nhập thành công');
           

@@ -133,6 +133,31 @@
 .user-table .btn-reset-password:hover {
     background-color: #3498db;
 }
+
+.enabled {
+  color: green;
+  font-weight: bold;
+}
+
+.disabled {
+  color: red;
+  font-weight: bold;
+}
+
+.btn-switch {
+  margin-right: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-switch:hover {
+  background-color: #0056b3;
+}
+
 /* Modal Content */
 .modal-content {
     background-color: white;

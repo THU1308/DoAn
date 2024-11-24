@@ -36,87 +36,98 @@
         <app-notification [showNotification]="showNotification" [message]="message"
             (closeNotification)="showNotification"></app-notification>
 
-       <!-- User Management -->
-<table *ngIf="!isLoading" class="user-table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let user of users">
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>
-                <button (click)="showEditForm(user)" class="btn-edit">Edit</button>
-                <button (click)="showUpdateRoleForm(user)" class="btn-update-role">Update Role</button>
-                <button (click)="showEnableUserForm(user)" class="btn-enable">Enable</button>
-                <button (click)="showResetPasswordForm(user)" class="btn-reset-password">Reset Password</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        <!-- User Management -->
+        <table *ngIf="!isLoading" class="user-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span [ngClass]="{'enabled': user.enable, 'disabled': !user.enable}">
+                            {{ user.enable ? 'Enable' : 'Disable' }}
+                        </span>
+                    </td>
+                    <td>
+                        <button (click)="switchUserStatus(user)" class="btn-switch">
+                            {{ user.enable ? 'Disable' : 'Enable' }}
+                        </button>
+                        <button (click)="showEditForm(user)" class="btn-edit">Edit</button>
+                        <button (click)="showUpdateRoleForm(user)" class="btn-update-role">Update Role</button>
+                        <button (click)="showResetPasswordForm(user)" class="btn-reset-password">Reset Password</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Modal chỉnh sửa người dùng -->
+        <div *ngIf="selectedUser && isEditFormVisible" class="modal-content">
+            <h3>Edit User</h3>
+            <form #userForm="ngForm" (ngSubmit)="updateUser(userForm,selectUser)">
+                <div>
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input id="firstName" [(ngModel)]="selectedUser.firstName" name="firstName" class="form-input"
+                        required>
+                </div>
+                <div>
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input id="lastName" [(ngModel)]="selectedUser.lastName" name="lastName" class="form-input"
+                        required>
+                </div>
+                <div>
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" [(ngModel)]="selectedUser.email" name="email" class="form-input" required email>
+                </div>
+                <div>
+                    <label for="country" class="form-label">Country</label>
+                    <input id="country" [(ngModel)]="selectedUser.country" name="country" class="form-input" required>
+                </div>
+                <div>
+                    <label for="state" class="form-label">State</label>
+                    <input id="state" [(ngModel)]="selectedUser.state" name="state" class="form-input" required>
+                </div>
+                <div>
+                    <label for="address" class="form-label">Address</label>
+                    <input id="address" [(ngModel)]="selectedUser.address" name="address" class="form-input" required>
+                </div>
+                <div>
+                    <label for="phone" class="form-label">Phone</label>
+                    <input id="phone" [(ngModel)]="selectedUser.phone" name="phone" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-submit">Save</button>
+            </form>
+        </div>
 
-<!-- Modal chỉnh sửa người dùng -->
-<div *ngIf="selectedUser && isEditFormVisible" class="modal-content">
-    <h3>Edit User</h3>
-    <form #userForm="ngForm" (ngSubmit)="updateUser(userForm,selectUser)">
-        <div>
-            <label for="firstName" class="form-label">First Name</label>
-            <input id="firstName" [(ngModel)]="selectedUser.firstName" name="firstName" class="form-input" required>
-        </div>
-        <div>
-            <label for="lastName" class="form-label">Last Name</label>
-            <input id="lastName" [(ngModel)]="selectedUser.lastName" name="lastName" class="form-input" required>
-        </div>
-        <div>
-            <label for="email" class="form-label">Email</label>
-            <input id="email" [(ngModel)]="selectedUser.email" name="email" class="form-input" required email>
-        </div>
-        <div>
-            <label for="country" class="form-label">Country</label>
-            <input id="country" [(ngModel)]="selectedUser.country" name="country" class="form-input" required>
-        </div>
-        <div>
-            <label for="state" class="form-label">State</label>
-            <input id="state" [(ngModel)]="selectedUser.state" name="state" class="form-input" required>
-        </div>
-        <div>
-            <label for="address" class="form-label">Address</label>
-            <input id="address" [(ngModel)]="selectedUser.address" name="address" class="form-input" required>
-        </div>
-        <div>
-            <label for="phone" class="form-label">Phone</label>
-            <input id="phone" [(ngModel)]="selectedUser.phone" name="phone" class="form-input" required>
-        </div>
-        <button type="submit" class="btn-submit">Save</button>
-    </form>
-</div>
 
 
+        <!-- Reset Password -->
+        <div *ngIf="isResetPasswordFormVisible" class="modal-content">
+            <h3>Reset Password</h3>
+            <input [(ngModel)]="usernameToResetPassword" placeholder="Enter username to reset password"
+                class="form-input" />
+            <button (click)="resetPassword()" class="btn-reset-password">Reset Password</button>
+        </div>
 
-<!-- Reset Password -->
-<div *ngIf="isResetPasswordFormVisible" class="modal-content">
-    <h3>Reset Password</h3>
-    <input [(ngModel)]="usernameToResetPassword" placeholder="Enter username to reset password" class="form-input" />
-    <button (click)="resetPassword()" class="btn-reset-password">Reset Password</button>
-</div>
+        <!-- Update Role -->
+        <div *ngIf="isUpdateRoleFormVisible" class="modal-content">
+            <h3>Update Role</h3>
+            <input [(ngModel)]="usernameToUpdateRole" placeholder="Enter username to update role" class="form-input" />
+            <button (click)="updateRole()" class="btn-update-role">Update Role</button>
+        </div>
 
-<!-- Update Role -->
-<div *ngIf="isUpdateRoleFormVisible" class="modal-content">
-    <h3>Update Role</h3>
-    <input [(ngModel)]="usernameToUpdateRole" placeholder="Enter username to update role" class="form-input" />
-    <button (click)="updateRole()" class="btn-update-role">Update Role</button>
-</div>
-
-<!-- Enable User -->
-<div *ngIf="isEnableUserFormVisible" class="modal-content">
-    <h3>Enable User</h3>
-    <input [(ngModel)]="usernameToEnable" placeholder="Enter username to enable" class="form-input" />
-    <button (click)="enableUser()" class="btn-enable">Enable User</button>
-</div>
+        <!-- Enable User -->
+        <div *ngIf="isEnableUserFormVisible" class="modal-content">
+            <h3>Enable User</h3>
+            <input [(ngModel)]="usernameToEnable" placeholder="Enter username to enable" class="form-input" />
+            <button (click)="enableUser()" class="btn-enable">Enable User</button>
+        </div>
 
 
     </div>

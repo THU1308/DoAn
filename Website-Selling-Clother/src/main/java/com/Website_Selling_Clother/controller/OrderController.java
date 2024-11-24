@@ -7,7 +7,9 @@ import com.Website_Selling_Clother.entity.OrderDetail;
 import com.Website_Selling_Clother.exception.DataNotFoundException;
 import com.Website_Selling_Clother.repository.OrderDetailRepository;
 import com.Website_Selling_Clother.response.OrderDetailResponse;
+import com.Website_Selling_Clother.service.Imp.EmailService;
 import com.Website_Selling_Clother.service.Imp.OrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class OrderController {
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("")
     public ResponseEntity<List<Order>> getList(){
@@ -93,9 +98,11 @@ public class OrderController {
     }
 
     @PostMapping("/create")
+    @Transactional
     public ResponseData<String> placeOrder(@RequestBody OrderDTO orderDTO){
         try {
             orderService.placeOrder(orderDTO);
+            emailService.sendOrderEmail(orderDTO);
             return new ResponseData<>(HttpStatus.OK,"Success","Order thành công");
         } catch (DataNotFoundException e) {
             return new ResponseData<>(HttpStatus.OK,"Fail","Order thất bại");

@@ -3,6 +3,7 @@ import { UserDto } from '../dto/user.dto';
 import { UserRequest } from '../request/user.request';
 import { UserService } from '../services/user/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TokenService } from '../services/token.service';
 
 @Component({
   selector: 'app-admin-user',
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AdminUserComponent {
 
-  users: any[] = [];
+  users: UserDto[] = [];
   selectedUser: any;
   usernameToResetPassword: string = '';
   usernameToUpdateRole: string = '';
@@ -93,10 +94,11 @@ export class AdminUserComponent {
     this.message = message;
     this.timeoutNotification(2000);
   }
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private tokenService : TokenService) { }
 
   ngOnInit(): void {
     this.loadUsers();
+    console.log(this.tokenService.getToken())
   }
 
   // Tải danh sách người dùng
@@ -105,6 +107,7 @@ export class AdminUserComponent {
     this.userService.getListUsers().subscribe(
       (data) => {
         this.users = data.data;
+        console.log(this.users)
         this.isLoading = false;
       },
       (error) => {
@@ -113,6 +116,24 @@ export class AdminUserComponent {
       }
     );
   }
+
+  switchUserStatus(user: any): void {
+    const newStatus = !user.enable; // Đảo ngược trạng thái hiện tại
+    this.selectUser(user)
+    // Cập nhật trạng thái qua API
+    this.userService.enableEmployee(user.username).subscribe(
+      (response) => {
+        // Cập nhật trạng thái trong danh sách người dùng
+        user.enable = newStatus;
+        this.notification(`User ${user.username} status updated to ${newStatus ? 'Enable' : 'Disable'}`);
+      },
+      (error) => {
+        console.error(`Failed to update status for user ${user.username}:`, error);
+      }
+    );
+  }
+  
+  
 
   // Cập nhật thông tin người dùng
   updateUser(userForm: any, user: any) {

@@ -7,7 +7,6 @@ import com.Website_Selling_Clother.repository.*;
 import com.Website_Selling_Clother.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +36,6 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    @Transactional
     public void placeOrder(OrderDTO orderDTO) throws DataNotFoundException {
         Order order = new Order();
         Date currentTime = new Date();
@@ -59,7 +57,7 @@ public class OrderService implements IOrderService {
         long sum = 0;
         for(var item: orderDTO.getOrderDetailDTOS()){
             OrderDetail orderDetail = new OrderDetail();
-            Product product = productRepository.findById(item.getProductId()).orElseThrow(() -> new DataNotFoundException("Không tìm thấy id product: " + item.getProductId()));
+            Product product = productRepository.findById(item.getProductId());
             ProductSize productSize = productSizeRepository.getQuantity(product.getId(), item.getSizeId());
             orderDetail.setProduct(product);
             orderDetail.setProductSize(productSize);
