@@ -21,6 +21,12 @@ export class PaymentResultComponent implements OnInit {
     }, milisecon);
   }
 
+  notification(message: string) {
+    this.showNotification = true;
+    this.message = message;
+    this.timeoutNotification(2000);
+  }
+
   private paymentResultSubject = new BehaviorSubject<string | null>(null); // Tạo BehaviorSubject
   constructor(
     private route: ActivatedRoute,
@@ -56,13 +62,10 @@ export class PaymentResultComponent implements OnInit {
         next: (response: any) => {
           if (response.body.message === 'Success') {
             this.cartService.clearCart(); // Xóa giỏ hàng sau khi thành công
-            this.showNotification = true;
-            this.message = 'Đơn hàng thành công! Cảm ơn bạn đã mua sắm!';
-            this.timeoutNotification(2000); // Ẩn thông báo sau 2 giây
+            this.orderService.sendOrderToEmail(order) // gửi mail
+            this.notification("Đơn hàng thành công! Cảm ơn bạn đã mua sắm!")
           } else {
-            this.showNotification = true;
-            this.message = 'Đơn hàng không thành công. Vui lòng thử lại sau.';
-            this.timeoutNotification(2000); // Ẩn thông báo sau 2 giây
+            this.notification("Đơn hàng không thành công. Vui lòng thử lại sau.");
           }
         },
         error: (error: any) => {

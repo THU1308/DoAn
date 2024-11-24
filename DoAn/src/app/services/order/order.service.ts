@@ -19,4 +19,9 @@ export class OrderService{
         const addOrderUrl = `${enviroment.apiBaseUrl}/order/create`;
         return this.http.post(addOrderUrl, orderDto, { headers: this.headers, observe: 'response' })
       }
+
+      sendOrderToEmail(order: OrderDto): Observable<any> {
+        const sendOrderToEmail = `${enviroment.apiBaseUrl}/email/sendOrderToEmail`;
+        return this.http.post(sendOrderToEmail, order, { headers : this.headers });
+      }
 }
