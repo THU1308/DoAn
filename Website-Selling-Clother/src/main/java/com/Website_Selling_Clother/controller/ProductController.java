@@ -113,20 +113,22 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseData<ProductDTO> getProductById(@PathVariable int id) {
         try {
+            // Lấy thông tin sản phẩm theo ID
             Product product = productService.getProduct(id);
             ProductDTO productDTO = ProductDTO.fromProduct(product);
-            Set<Integer> sizeIds = new HashSet<>();
-            for (var item : productSizeRepository.findAll()) {
-                if (item.getProduct().getId() == productDTO.getId()) {
-                    sizeIds.add(item.getSize().getId());
-                }
-            }
+
+            // Lấy danh sách sizeIds cho sản phẩm này từ repository
+            Set<Integer> sizeIds = productSizeRepository.findSizeIdsByProductId(product.getId());
+
+            // Cập nhật sizeIds vào DTO
             productDTO.setSizeIds(sizeIds);
+
             return new ResponseData<>(HttpStatus.OK, "Success", productDTO);
         } catch (Exception e) {
             return new ResponseData<>(HttpStatus.BAD_REQUEST, "Bad request");
         }
     }
+
 
     @GetMapping("/listnew/{number}")
     public ResponseData<List<ProductDTO>> getListNewest(@PathVariable int number) {

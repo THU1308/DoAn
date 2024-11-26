@@ -47,7 +47,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query(value = "SELECT i.id, i.name, i.type, i.size, i.data " +
             "FROM image i INNER JOIN product_image pi ON pi.image_id = i.id " +
-            "WHERE pi.product_id = :productId AND pi.is_deleted = false", nativeQuery = true)
+            "WHERE pi.product_id = :productId", nativeQuery = true)
     List<Object[]> findImagesByProductId(@Param("productId") int productId);
 
     Product findById(int id);
