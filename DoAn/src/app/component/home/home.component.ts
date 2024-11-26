@@ -132,11 +132,10 @@ export class HomeComponent implements OnInit {
     });
 
     try {
-      debugger;
+      debugger
       const response = await this.productService.getListNewest().toPromise();
       this.listProduct = response.data;
-      this.listProduct.shift();
-
+      debugger
       if (this.listProduct) {
         // Chờ tất cả lời gọi API lấy ảnh cho từng sản phẩm
         await Promise.all(
@@ -149,6 +148,7 @@ export class HomeComponent implements OnInit {
             }
             await this.getImages(product);
             await this.getSize(product);
+            
           }),
         );
       }
@@ -169,10 +169,12 @@ export class HomeComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.imageService.getListImgById(productDetailDto.imageIds[0]).subscribe({
         next: (response: any) => {
-          debugger;
+          
           if (response && Array.isArray(response)) {
+            debugger
             productDetailDto.images = response;
           } else if (response) {
+            debugger
             productDetailDto.images = [response];
           }
           resolve(); // Hoàn thành Promise khi ảnh được gán

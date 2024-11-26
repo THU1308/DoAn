@@ -68,7 +68,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProduct(int id) throws DataNotFoundException {
-        return productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Không tìm thấy product với id: " + id));
+        return productRepository.findById(id);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product updateProduct(int id, ProductDTO productDTO) throws DataNotFoundException {
-        Product product= productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Không tìm thấy product id: " + id));
+        Product product= productRepository.findById(id);
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
@@ -116,7 +116,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void deleteProduct(int id) throws DataNotFoundException {
-        Product product= productRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Không tìm thấy product id: " + id));
+        Product product= productRepository.findById(id);
         productRepository.delete(product);
     }
 

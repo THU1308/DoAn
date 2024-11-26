@@ -12,6 +12,8 @@ export class ProductDetailDto {
   imageIds: number[];
   sizeIds: number[];
   productSize : SizeDto[];
+  isDeleted : boolean = false;
+
 
   //send to cart
   selectedSize?: any;
@@ -26,7 +28,8 @@ export class ProductDetailDto {
     images: ImageDto[] = [],
     imageIds: number[] = [],
     sizeIds: number[] = [],
-    productSize : SizeDto[] = []
+    productSize : SizeDto[] = [],
+    isDeleted = false
   ) {
     this.id = id;
     this.name = name;
@@ -37,5 +40,6 @@ export class ProductDetailDto {
     this.imageIds = imageIds;
     this.sizeIds = sizeIds;
     this.productSize = productSize;
+    this.isDeleted = isDeleted;
   }
 }

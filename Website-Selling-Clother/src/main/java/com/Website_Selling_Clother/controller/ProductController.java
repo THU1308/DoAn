@@ -130,21 +130,25 @@ public class ProductController {
 
     @GetMapping("/listnew/{number}")
     public ResponseData<List<ProductDTO>> getListNewest(@PathVariable int number) {
+        // Lấy danh sách sản phẩm mới nhất, đã lọc is_deleted = false
         List<Product> list = productService.getListNewst(number);
         List<ProductDTO> productDTOList = new ArrayList<>();
+
+        // Lặp qua các sản phẩm để tạo DTO cho từng sản phẩm
         for (var item : list) {
             ProductDTO productDTO = ProductDTO.fromProduct(item);
-            Set<Integer> sizeIds = new HashSet<>();
-            for (var item1 : productSizeRepository.findAll()) {
-                if (item1.getProduct().getId() == productDTO.getId()) {
-                    sizeIds.add(item1.getSize().getId());
-                }
-            }
+
+            // Lấy danh sách ProductSize cho sản phẩm hiện tại
+            Set<Integer> sizeIds = productSizeRepository.findSizeIdsByProductId(item.getId());
+
+            // Cập nhật danh sách sizeIds vào DTO
             productDTO.setSizeIds(sizeIds);
             productDTOList.add(productDTO);
         }
-        return new ResponseData<>(HttpStatus.OK,"Success",productDTOList);
+
+        return new ResponseData<>(HttpStatus.OK, "Success", productDTOList);
     }
+
 
 //    @GetMapping("/price")
 //    public ResponseEntity<?> getListByPrice(){
