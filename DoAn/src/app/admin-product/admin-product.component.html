@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản Phẩm - Web Bán Hàng Thời Trang</title>
+   
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/admin/category">Dashboard</a></li>
+            <li><a href="/admin/products">Sản phẩm</a></li>
+            <li><a href="/admin/orders">Đơn hàng</a></li>
+            <li><a href="/admin/customers">Khách hàng</a></li>
+            <li><a href="/admin/reports">Thống kê</a></li>
+            <li><a href="/logout">Đăng xuất</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="logo">Admin - Web Thời Trang</div>
+            <div class="user-info">
+                <span>Chào, Admin</span>
+                <span><a href="/logout">Đăng xuất</a></span>
+            </div>
+        </div>
+
+        <app-preloader [isLoading]="isLoading"></app-preloader>
+        <app-notification [showNotification]="showNotification" [message]="message"
+            (closeNotification)="showNotification = false"></app-notification>
+
+        <!-- Product Management -->
+        <div class="admin-product">
+            <h1>Quản lý sản phẩm</h1>
+
+            <!-- Product Management Form -->
+            <form (ngSubmit)="saveProduct()" [formGroup]="productForm">
+                <!-- Tên sản phẩm -->
+                <div class="form-group">
+                  <label for="name">Tên sản phẩm:</label>
+                  <input id="name" formControlName="name" class="form-control" />
+                </div>
+              
+                <!-- Mô tả -->
+                <div class="form-group">
+                  <label for="description">Mô tả:</label>
+                  <textarea id="description" formControlName="description" class="form-control"></textarea>
+                </div>
+              
+                <!-- Giá -->
+                <div class="form-group">
+                  <label for="price">Giá:</label>
+                  <input id="price" type="number" formControlName="price" class="form-control" />
+                </div>
+              
+                <!-- Danh mục -->
+                <div class="form-group">
+                  <label for="categoryId">Danh mục:</label>
+                  <select id="categoryId" formControlName="categoryId" class="form-control">
+                    <option *ngFor="let category of categories" [value]="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+              
+                <!-- Input chọn nhiều ảnh -->
+                <div class="form-group">
+                  <label for="images">Chọn ảnh:</label>
+                  <input
+                    id="images"
+                    type="file"
+                    (change)="onFileSelected($event)"
+                    multiple
+                    class="form-control"
+                  />
+              
+                  <!-- Hiển thị tên các ảnh đã chọn -->
+                  <div *ngIf="selectedImages.length > 0">
+                    <h5>Ảnh đã chọn:</h5>
+                    <ul>
+                      <li *ngFor="let image of selectedImages">{{ image.name }}</li>
+                    </ul>
+                  </div>
+                </div>
+              
+                <!-- Chọn kích thước -->
+                <div class="form-group size-selector">
+                    <label for="sizeIds">Chọn kích thước:</label>
+                    <div class="size-options">
+                        <div *ngFor="let size of sizes" class="size-option">
+                            <input 
+                                type="checkbox" 
+                                [id]="'size-' + size.id" 
+                                [value]="size.id" 
+                                (change)="onSizeSelected($event)" 
+                                [checked]="selectedSizes.includes(size.id)" 
+                            />
+                            <label [for]="'size-' + size.id">{{ size.name }}</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit -->
+                <button
+                  type="submit"
+                  [disabled]="productForm.invalid || isLoading"
+                  class="btn btn-primary"
+                >
+                  {{ editing ? 'Cập nhật' : 'Thêm mới' }}
+                </button>
+                <button
+                  type="button"
+                  *ngIf="editing"
+                  (click)="cancelEdit()"
+                  class="btn btn-secondary"
+                >
+                  Hủy
+                </button>
+              </form>
+              
+            <!-- Product List Table -->
+            <table *ngIf="!isLoading">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Giá</th>
+                        <th>Danh mục</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products">
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price | currency }}</td>
+                        <td>{{ product.categoryId }}</td>
+                        <td>
+                            <button (click)="editProduct(product)">Sửa</button>
+                            <button (click)="deleteProduct(product.id)">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="products.length === 0">
+                        <td colspan="5">Không có sản phẩm nào!</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Loading Spinner -->
+            <app-preloader *ngIf="isLoading" [isLoading]="isLoading"></app-preloader>
+        </div>
+    </div>
+
+</body>
+
+</html>

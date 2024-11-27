@@ -39,10 +39,9 @@ export class LoginComponent {
         debugger
         if (response.message === 'Success') {
           this.tokenService.setToken(response.data.token);
-          
-          this.cartService.updateCartStatus();
+          debugger
           alert('Đăng nhập thành công');
-          
+          this.cartService.updateCartStatus()
           this.router.navigate(['']);
         } else {
           alert('Đăng nhập thất bại');

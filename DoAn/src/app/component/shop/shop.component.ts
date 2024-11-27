@@ -132,6 +132,8 @@ export class ShopComponent implements OnInit {
     );
   }
 
+  
+
   ngOnInit(): void {
     this.isLoading = true;
     this.getListProducts();
@@ -318,6 +320,7 @@ export class ShopComponent implements OnInit {
       this.selectedProduct.selectedSize = this.selectedSize;
       this.selectedProduct.productQuantity = this.productQuantity;
 
+      debugger
       this.cartService.addToCart(this.selectedProduct);
       this.showNotification = true;
       this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');

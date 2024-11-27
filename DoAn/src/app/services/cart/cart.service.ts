@@ -18,19 +18,26 @@ export class ShoppingCartService {
   constructor(private tokenService: TokenService) {
     this.dbPromise = openDB('ShoppingCartDB', 1, {
       upgrade: (db) => {
+        debugger
+        console.log(db.objectStoreNames)
         if (!db.objectStoreNames.contains('shopping_cart_guest')) {
           db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
         }
-
         // Tạo store cho người dùng nếu cần
         const token = this.tokenService.getToken();
         if (token && !db.objectStoreNames.contains(`shopping_cart_${token}`)) {
           db.createObjectStore(`shopping_cart_${token}`, { keyPath: 'id' });
         }
       }
+      
     });
-
+   
   }
+
+  async initializeCartOnLogin(): Promise<void> {
+    await this.updateCartStore();
+}
+
 
 
   // Cập nhật cartStore dựa trên trạng thái đăng nhập
@@ -44,6 +51,7 @@ export class ShoppingCartService {
 
   // Cập nhật số lượng và tổng tiền của giỏ hàng
   public async updateCartStatus() {
+    this.updateCartStore()
     const cart = await this.getCart();
     this.cartQuantity$.next(cart.length);
     this.cartTotal$.next(cart.reduce((total, item) => total + item.price * (item.productQuantity || 1), 0));

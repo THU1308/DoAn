@@ -63,6 +63,7 @@
                             <thead>
                                 <tr>
                                     <th>Product</th>
+                                    <th>Size</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
                                     <th>Subtotal</th>
@@ -79,6 +80,13 @@
                                         <div class="product__cart__item__text">
                                             <h6>{{ item.productName }}</h6>
                                             <h5>{{ item.productPrice | currency: 'VND' }}</h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="quantity">
+                                            <div class="pro-qty-2">
+                                                <input type="text" min="1"[value]="item.productSize.name">
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="quantity__item">
