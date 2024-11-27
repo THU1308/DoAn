@@ -250,12 +250,12 @@ public class ProductController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
+    public ResponseData<?> deleteProduct(@PathVariable int id) {
         try {
             productService.deleteProduct(id);
-            return ResponseEntity.ok("Xóa sản phẩm thành công");
+            return new ResponseData<>(HttpStatus.OK,"Success");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseData<>(HttpStatus.BAD_REQUEST,"Failed!");
         }
     }
 

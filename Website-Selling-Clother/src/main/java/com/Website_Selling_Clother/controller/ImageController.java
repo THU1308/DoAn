@@ -65,41 +65,53 @@ public class ImageController {
         }
     }
 
-
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws BadRequestException {
+    public ResponseData<List<Image>> uploadFiles(@RequestParam("files") MultipartFile[] files) throws BadRequestException {
         File uploadDir = new File(UPLOAD_DIR);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-        String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);;
-        if (originalFilename != null && originalFilename.length() > 0) {
 
-            if (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("gif") && !extension.equals("svg") && !extension.equals("jpeg")) {
-                throw new BadRequestException("Không hỗ trợ định dạng file này");
-            }
-            try {
-                Image img = new Image();
-                img.setName(file.getOriginalFilename());
-                img.setSize(file.getSize());
-                img.setType(extension);
-                img.setData(file.getBytes());
-                String uid = UUID.randomUUID().toString();
-                String link = UPLOAD_DIR + uid + "." + extension;
-                File serverFile = new File(link);
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-                stream.write(file.getBytes());
-                stream.close();
+        List<Image> uploadedImages = new ArrayList<>();
 
-                imageService.insertImage(img);
-                return ResponseEntity.ok(img);
-            } catch (Exception e) {
-                throw new BadRequestException("Lỗi khi upload file");
+        for (MultipartFile file : files) {
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+
+            if (originalFilename != null && originalFilename.length() > 0) {
+                // Kiểm tra định dạng file
+                if (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("gif") && !extension.equals("svg") && !extension.equals("jpeg")) {
+                    throw new BadRequestException("Không hỗ trợ định dạng file này");
+                }
+
+                try {
+                    Image img = new Image();
+                    img.setName(file.getOriginalFilename());
+                    img.setSize(file.getSize());
+                    img.setType(extension);
+                    img.setData(file.getBytes());
+
+                    // Lưu ảnh vào thư mục
+                    String uid = UUID.randomUUID().toString();
+                    String link = UPLOAD_DIR + uid + "." + extension;
+                    File serverFile = new File(link);
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+                    stream.write(file.getBytes());
+                    stream.close();
+
+                    // Lưu ảnh vào database
+                    imageService.insertImage(img);
+                    uploadedImages.add(img);
+                } catch (Exception e) {
+                    throw new BadRequestException("Lỗi khi upload file: " + file.getOriginalFilename());
+                }
+            } else {
+                throw new BadRequestException("File không hợp lệ");
             }
         }
-        throw new BadRequestException("File không hợp lệ");
 
+        return new ResponseData<>(HttpStatus.OK,"Success",uploadedImages);  // Trả về danh sách các ảnh đã tải lên
     }
+
 }

@@ -18,6 +18,8 @@ import { AdminSizeComponent } from './admin-size/admin-size.component';
 import { AdminBannerComponent } from './admin-banner/admin-banner.component';
 import { AdminBlogComponent } from './admin-blog/admin-blog.component';
 import { AdminUserComponent } from './admin-user/admin-user.component';
+import { AdminProductComponent } from './admin-product/admin-product.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent }, 
@@ -38,6 +40,7 @@ const routes: Routes = [
   { path: 'admin/banner', component: AdminBannerComponent},
   { path: 'admin/blog', component: AdminBlogComponent},
   { path: 'admin/user', component: AdminUserComponent},
+  { path: 'admin/product', component: AdminProductComponent},
   { path: '**', redirectTo: '' },
 ];
 

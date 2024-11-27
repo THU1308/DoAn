@@ -20,7 +20,7 @@ public class ProductDTO {
     private int categoryId;
     private Set<Integer> imageIds;
     private Set<Integer> sizeIds;
-    private int isDeleted;
+    private boolean isDeleted;
 
 
     public static ProductDTO fromProduct(Product product){
@@ -30,7 +30,7 @@ public class ProductDTO {
         productDTO.setPrice(product.getPrice());
         productDTO.setCategoryId(product.getCategory().getId());
         productDTO.setDescription(product.getDescription());
-        productDTO.setIsDeleted(product.getIsDeleted());
+        productDTO.setDeleted(product.getIsDeleted());
         if(!product.getImages().isEmpty()){
             productDTO.setImageIds(product.getImages().stream()
                     .map(Image::getId)

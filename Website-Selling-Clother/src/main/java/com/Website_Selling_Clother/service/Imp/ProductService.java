@@ -117,7 +117,9 @@ public class ProductService implements IProductService {
     @Override
     public void deleteProduct(int id) throws DataNotFoundException {
         Product product= productRepository.findById(id);
-        productRepository.delete(product);
+        product.setDeleted(true);
+        productRepository.save(product);
+
     }
 
     @Override

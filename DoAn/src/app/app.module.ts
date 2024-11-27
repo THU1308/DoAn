@@ -32,7 +32,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminSizeComponent } from './admin-size/admin-size.component';
 import { AdminBannerComponent } from './admin-banner/admin-banner.component';
 import { AdminBlogComponent } from './admin-blog/admin-blog.component';
-import { AdminUserComponent } from './admin-user/admin-user.component'; 
+import { AdminUserComponent } from './admin-user/admin-user.component';
+import { AdminProductComponent } from './admin-product/admin-product.component'; 
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { AdminUserComponent } from './admin-user/admin-user.component';
    AdminBannerComponent,
    AdminBlogComponent,
    AdminUserComponent,
+   AdminProductComponent,
   ],
   imports: [
     BrowserModule,

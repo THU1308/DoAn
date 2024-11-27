@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
+  HttpErrorResponse,
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { enviroment } from 'src/app/enviroment/enviroment';
 
 
@@ -60,5 +61,49 @@ export class ProductService {
     const apiUrl = `${enviroment.apiBaseUrl}/product/image`;
     const params = new HttpParams().set('productId', productId);
     return this.http.get(apiUrl, { headers: this.headers, params });
+  }
+
+  addProduct(product: any): Observable<any> {
+    const apiUrl = `${enviroment.apiBaseUrl}/product`;
+    return this.http.post<any>(apiUrl, product);
+  }
+
+  updateProduct(id: number, product: any): Observable<any> {
+    const apiUrl = `${enviroment.apiBaseUrl}/product`;
+    return this.http.put<any>(`${apiUrl}/update/${id}`, product);
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    const apiUrl = `${enviroment.apiBaseUrl}/product`;
+    return this.http.delete<void>(`${apiUrl}/delete/${id}`);
+  }
+
+   // Method to upload multiple files (images)
+   uploadFiles(files: File[]): Observable<any> {
+    const formData = new FormData();
+
+    // Append each file to the FormData object
+    files.forEach(file => {
+      formData.append('files', file, file.name);
+    });
+
+    const apiUrl = `${enviroment.apiBaseUrl}/image/upload`;
+
+    // Send a POST request to upload the files
+    return this.http.post<any>(`${apiUrl}`, formData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+   // Method to handle errors
+   private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
+    }
+    return throwError(errorMessage);
   }
 }
