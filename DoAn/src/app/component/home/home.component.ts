@@ -100,8 +100,9 @@ export class HomeComponent implements OnInit {
     private sizeService: SizeService, 
     private dialog :MatDialog
   ) {
-    console.log(this.cartService.getCartItems())
-    this.cartService.clearCart();
+    debugger
+    this.cartService.updateCartStore()
+    this.cartService.loadUserCart()
     this.suggestions$ = this.searchControl.valueChanges.pipe(
       debounceTime(150),
       distinctUntilChanged(),

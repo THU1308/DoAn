@@ -43,7 +43,9 @@ export class HeaderComponent {
   }
   logout(){
     this.tokenService.removeToken();
-    this.cartService.clearCart();
+    this.cartService.updateCartStore()
+    this.cartService.updateCartStatus()
+    this.cartService.loadUserCart()
     alert('Đăng xuất thành công');
   }
 }

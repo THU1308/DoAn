@@ -41,7 +41,8 @@ export class LoginComponent {
           this.tokenService.setToken(response.data.token);
           debugger
           alert('Đăng nhập thành công');
-          this.cartService.updateCartStatus()
+        
+          this.cartService.loadUserCart()
           this.router.navigate(['']);
         } else {
           alert('Đăng nhập thất bại');
@@ -51,14 +52,5 @@ export class LoginComponent {
         alert(`Lỗi: ${error.error}`);
       },
     });
-  }
-
-  logout() {
-    this.tokenService.removeToken(); // Xóa token khi logout
-    // KHÔNG CẦN ĐẶT LẠI cartStore
-    // this.cartService.cartStore = 'shopping_cart_guest'; // Quay lại giỏ hàng khách
-    this.cartService.updateCartStatus(); // Cập nhật số lượng và tổng tiền
-    //this.cartService.cartQuantity$.next(0);
-    //this.cartService.cartTotal$.next(0);
   }
 }
