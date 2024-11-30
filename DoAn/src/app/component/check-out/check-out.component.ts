@@ -119,6 +119,7 @@ export class CheckOutComponent {
 
     // Now process based on selectedPaymentMethod
     if (this.selectedPaymentMethod === 'COD') {
+      debugger
       this.selectedPaymentMethod = 'pending';
       debugger  
       this.processCODOrder(form);

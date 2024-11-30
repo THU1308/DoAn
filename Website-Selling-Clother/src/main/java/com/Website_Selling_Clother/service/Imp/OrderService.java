@@ -1,6 +1,6 @@
 package com.Website_Selling_Clother.service.Imp;
 
-import com.Website_Selling_Clother.dto.OrderDTO;
+import com.Website_Selling_Clother.dto.*;
 import com.Website_Selling_Clother.entity.*;
 import com.Website_Selling_Clother.exception.DataNotFoundException;
 import com.Website_Selling_Clother.repository.*;
@@ -8,10 +8,10 @@ import com.Website_Selling_Clother.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.util.*;
 
 @Service
 public class OrderService implements IOrderService {
@@ -53,7 +53,7 @@ public class OrderService implements IOrderService {
         order.setNote(orderDTO.getNote());
         order.setCreateAt(currentTime);
         order.setEnable(true);
-        order.setPayment_status(orderDTO.getPaymentStatus());
+        order.setPaymentStatus(orderDTO.getPaymentStatus());
         orderRepository.save(order);
         long sum = 0;
         for(var item: orderDTO.getOrderDetailDTOS()){
@@ -115,7 +115,7 @@ public class OrderService implements IOrderService {
     public Order updatePaymentStatus(int id, String paymentStatus) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
-        order.setPayment_status(paymentStatus);
+        order.setPaymentStatus(paymentStatus);
         return orderRepository.save(order);
     }
 
@@ -125,5 +125,41 @@ public class OrderService implements IOrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
         order.setEnable(false); // Đánh dấu là đã xóa
         orderRepository.save(order);
+    }
+
+    // Lấy các đơn hàng hoàn tất trong khoảng thời gian
+    public List<Order> getOrdersBetweenDates(Date startDate, Date endDate) {
+        return orderRepository.findByCreateAtBetweenAndPaymentStatus(startDate, endDate, "completed");
+    }
+    public ByteArrayInputStream generateOrderReport(Date startDate, Date endDate) {
+        List<Order> orders = getOrdersBetweenDates(startDate, endDate);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintWriter writer = new PrintWriter(outputStream);
+
+        // Header CSV
+        writer.println("ID,First Name,Last Name,Country,Address,Town,State,Post Code,Email,Phone,Note,Total Price,Created At,Enable,Payment Status");
+
+        for (Order order : orders) {
+            writer.printf("%d,%s,%s,%s,%s,%s,%s,%d,%s,%s,%s,%d,%s,%b,%s%n",
+                    order.getId(),
+                    order.getFirstName(),
+                    order.getLastName(),
+                    order.getCountry(),
+                    order.getAddress(),
+                    order.getTown(),
+                    order.getState(),
+                    order.getPostCode(),
+                    order.getEmail(),
+                    order.getPhone(),
+                    order.getNote(),
+                    order.getTotalPrice(),
+                    order.getCreateAt(),
+                    order.isEnable(),
+                    order.getPaymentStatus());
+        }
+
+        writer.flush();
+        return new ByteArrayInputStream(outputStream.toByteArray());
     }
 }

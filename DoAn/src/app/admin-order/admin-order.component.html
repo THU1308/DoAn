@@ -62,10 +62,10 @@
                         <td>{{ order.id }}</td>
                         <td>{{ order.firstName }} {{ order.lastName }}</td>
                         <td>{{ order.totalPrice | vndCurrency }}</td>
-                        <td>{{ order.payment_status }}</td>
+                        <td>{{ order.paymentStatus }}</td>
                         <td>
-                            <select [(ngModel)]="order.payment_status" (change)="editPaymentStatus(order)">
-                                <option *ngIf="order.payment_status == 'pending'" value="pending">Pending</option>
+                            <select [(ngModel)]="order.paymentStatus" (change)="editPaymentStatus(order)">
+                                <option *ngIf="order.paymentStatus == 'pending'" value="pending">Pending</option>
                                 <option value="completed">Completed</option>
                             </select>
                         </td>

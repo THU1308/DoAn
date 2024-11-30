@@ -59,13 +59,13 @@ public class Order {
     private boolean enable;
 
     @Column(name = "payment_status")
-    private String payment_status;
+    private String paymentStatus;
 
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany(mappedBy="order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<OrderDetail> orderdetails;
 }

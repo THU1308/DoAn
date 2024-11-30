@@ -49,7 +49,7 @@ export class AdminOrderComponent implements OnInit {
           .includes(this.searchTerm.toLowerCase());
 
       const matchesStatus = this.filterStatus
-        ? order.payment_status === this.filterStatus
+        ? order.paymentStatus === this.filterStatus
         : true;
 
       return matchesSearch && matchesStatus;
@@ -57,9 +57,9 @@ export class AdminOrderComponent implements OnInit {
   }
 
   editPaymentStatus(order: Order): void {
-    this.orderService.updatePaymentStatus(order.id, order.payment_status).subscribe({
+    this.orderService.updatePaymentStatus(order.id, order.paymentStatus).subscribe({
       next: (updatedOrder) => {
-        order.payment_status = updatedOrder.payment_status; // Cập nhật trạng thái của order
+        order.paymentStatus = updatedOrder.payment_status; // Cập nhật trạng thái của order
         this.loadOrders()
         this.showSnackBar('Payment status updated!');
       },

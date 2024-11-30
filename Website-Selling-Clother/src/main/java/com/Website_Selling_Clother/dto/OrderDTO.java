@@ -55,7 +55,7 @@ public class OrderDTO {
         orderDTO.setPhone(order.getPhone());
         orderDTO.setTotalPrice(order.getTotalPrice());
         orderDTO.setUsername(order.getUser().getUsername());
-        orderDTO.setPaymentStatus(order.getPayment_status());
+        orderDTO.setPaymentStatus(order.getPaymentStatus());
         List<OrderDetailDTO> dtoList = new ArrayList<>();
         if(!order.getOrderdetails().isEmpty()){
             for (var item:order.getOrderdetails()) {

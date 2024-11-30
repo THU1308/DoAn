@@ -11,11 +11,14 @@ import com.Website_Selling_Clother.service.Imp.EmailService;
 import com.Website_Selling_Clother.service.Imp.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -149,4 +152,26 @@ public class OrderController {
             return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+
+
+    @GetMapping("/export/report")
+    public ResponseEntity<byte[]> exportOrderReport(
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date start = dateFormat.parse(startDate);
+            Date end = dateFormat.parse(endDate);
+
+            ByteArrayInputStream reportStream = orderService.generateOrderReport(start, end);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=order_report.csv");
+            return ResponseEntity.ok().headers(headers).body(reportStream.readAllBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }

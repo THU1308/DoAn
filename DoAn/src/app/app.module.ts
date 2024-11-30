@@ -38,7 +38,13 @@ import { AdminInventoryComponent } from './admin-inventory/admin-inventory.compo
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { NgxPaginationModule } from 'ngx-pagination';
-import { AdminOrderComponent } from './admin-order/admin-order.component'; 
+import { AdminOrderComponent } from './admin-order/admin-order.component';
+import { RevenueComponent } from './revenue/revenue.component';
+import { BaseChartDirective } from 'ng2-charts';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -70,6 +76,7 @@ import { AdminOrderComponent } from './admin-order/admin-order.component';
    AdminProductComponent,
    AdminInventoryComponent,
    AdminOrderComponent,
+  RevenueComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,7 +87,8 @@ import { AdminOrderComponent } from './admin-order/admin-order.component';
     BrowserAnimationsModule,
     MatDialogModule,
     MatSnackBarModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    BaseChartDirective,
   ],
   providers: [
     {
