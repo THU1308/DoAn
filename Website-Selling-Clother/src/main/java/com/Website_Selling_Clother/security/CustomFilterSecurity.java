@@ -85,6 +85,8 @@ public class CustomFilterSecurity {
                                     String.format("%s/size/**", apiPrefix)).permitAll()
                             .requestMatchers(GET,
                                     String.format("%s/banner/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET,
+                                    String.format("%s/product-size/**", apiPrefix)).permitAll()
                             .requestMatchers("/ws/**").permitAll()  // Cho phép tất cả các yêu cầu WebSocket không cần xác thực
                             .anyRequest()
                             .authenticated();
