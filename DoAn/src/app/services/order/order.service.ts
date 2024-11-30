@@ -23,7 +23,7 @@ export class OrderService {
     return this.http.post(sendOrderToEmail, order, { headers: this.headers });
   }
 
-  private apiUrl = 'http://localhost:8088/api/v1/orders';
+  private apiUrl = 'http://localhost:8088/api/v1/order';
 
   // Lấy tất cả đơn hàng
   getAllOrders(): Observable<any[]> {

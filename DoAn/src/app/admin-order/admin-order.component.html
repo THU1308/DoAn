@@ -1,1 +1,84 @@
-<p>admin-order works!</p>
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/admin/category">Dashboard</a></li>
+            <li><a href="/admin/products">Sản phẩm</a></li>
+            <li><a href="/admin/orders">Đơn hàng</a></li>
+            <li><a href="/admin/customers">Khách hàng</a></li>
+            <li><a href="/admin/reports">Thống kê</a></li>
+            <li><a href="/logout">Đăng xuất</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="logo">Admin - Web Thời Trang</div>
+            <div class="user-info">
+                <span>Chào, Admin</span>
+                <span><a href="/logout">Đăng xuất</a></span>
+            </div>
+        </div>
+        <div class="order-management">
+            <h2>Order Management</h2>
+
+            <!-- Search and Filter -->
+            <div class="search-filter">
+                <input type="text" placeholder="Search by customer name, email, or phone" [(ngModel)]="searchTerm"
+                    (input)="applyFilters()" />
+                <select [(ngModel)]="filterStatus" (change)="applyFilters()">
+                    <option value="">All Status</option>
+                    <option value="pending">pending</option>
+                    <option value="completed">completed</option>
+                </select>
+            </div>
+
+            <!-- Orders Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Total Price</th>
+                        <th>Payment Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let order of filteredOrders | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.firstName }} {{ order.lastName }}</td>
+                        <td>{{ order.totalPrice | vndCurrency }}</td>
+                        <td>{{ order.payment_status }}</td>
+                        <td>
+                            <select [(ngModel)]="order.payment_status" (change)="editPaymentStatus(order)">
+                                <option *ngIf="order.payment_status == 'pending'" value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </td>
+
+
+                    </tr>
+                </tbody>
+            </table>
+            <pagination-controls style="display: flex; justify-content: center; padding: 2rem;"
+                (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+    </div>
+
+</body>
+
+</html>

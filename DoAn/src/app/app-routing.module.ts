@@ -20,6 +20,7 @@ import { AdminBlogComponent } from './admin-blog/admin-blog.component';
 import { AdminUserComponent } from './admin-user/admin-user.component';
 import { AdminProductComponent } from './admin-product/admin-product.component';
 import { AdminInventoryComponent } from './admin-inventory/admin-inventory.component';
+import { AdminOrderComponent } from './admin-order/admin-order.component';
 
 
 const routes: Routes = [
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'admin/user', component: AdminUserComponent},
   { path: 'admin/product', component: AdminProductComponent},
   {path:'admin/inventory',component: AdminInventoryComponent},
+  {path: 'admin/order', component: AdminOrderComponent},
   { path: '**', redirectTo: '' },
 ];
 

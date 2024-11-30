@@ -4,7 +4,6 @@ import com.Website_Selling_Clother.dto.OrderDTO;
 import com.Website_Selling_Clother.dto.OrderDetailDTO;
 import com.Website_Selling_Clother.entity.Product;
 import com.Website_Selling_Clother.repository.ProductRepository;
-import com.Website_Selling_Clother.service.ImgurService;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
