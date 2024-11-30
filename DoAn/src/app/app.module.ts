@@ -37,7 +37,8 @@ import { AdminProductComponent } from './admin-product/admin-product.component';
 import { AdminInventoryComponent } from './admin-inventory/admin-inventory.component'; 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AdminOrderComponent } from './admin-order/admin-order.component'; 
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
    AdminUserComponent,
    AdminProductComponent,
    AdminInventoryComponent,
+   AdminOrderComponent,
   ],
   imports: [
     BrowserModule,

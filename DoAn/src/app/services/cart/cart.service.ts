@@ -5,7 +5,7 @@ import { TokenService } from '../token.service';
 import { CartDto } from 'src/app/dto/cart.dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShoppingCartService {
   private dbPromise: Promise<IDBPDatabase>;
@@ -18,8 +18,8 @@ export class ShoppingCartService {
   constructor(private tokenService: TokenService) {
     this.dbPromise = openDB('ShoppingCartDB', 1, {
       upgrade: (db) => {
-        debugger
-        console.log(db.objectStoreNames)
+        debugger;
+        console.log(db.objectStoreNames);
         if (!db.objectStoreNames.contains('shopping_cart_guest')) {
           db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
         }
@@ -28,20 +28,16 @@ export class ShoppingCartService {
         if (token && !db.objectStoreNames.contains(`shopping_cart_user`)) {
           db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
         }
-      }
-      
+      },
     });
-   
   }
 
   async initializeCartOnLogin(): Promise<void> {
     await this.updateCartStore();
-}
-
-
+  }
 
   // Cập nhật cartStore dựa trên trạng thái đăng nhập
-   public updateCartStore() {
+  public updateCartStore() {
     if (this.tokenService.isLoggedIn()) {
       this.cartStore = `shopping_cart_user`;
     } else {
@@ -53,99 +49,104 @@ export class ShoppingCartService {
   public async updateCartStatus() {
     const cart = await this.getCart();
     this.cartQuantity$.next(cart.length);
-    this.cartTotal$.next(cart.reduce((total, item) => total + item.price * (item.productQuantity || 1), 0));
+    this.cartTotal$.next(
+      cart.reduce(
+        (total, item) => total + item.price * (item.productQuantity || 1),
+        0,
+      ),
+    );
   }
 
   public async loadUserCart(): Promise<void> {
-    this.updateCartStore()
+    this.updateCartStore();
     const cart = await this.getCart();
     this.cartItems$.next(cart);
     await this.updateCartStatus();
   }
-   // Lấy tất cả sản phẩm trong giỏ hàng từ IndexedDB
-   async getCart(): Promise<any[]> {
+  // Lấy tất cả sản phẩm trong giỏ hàng từ IndexedDB
+  async getCart(): Promise<any[]> {
     const db = await this.dbPromise;
     const userId = this.tokenService.getToken(); // Lấy userId từ token
     if (this.tokenService.isLoggedIn()) {
-      return await db.getAll(this.cartStore).then((cartItems) =>
-        cartItems.filter(item => item.userId === userId) // Chỉ lấy sản phẩm của người dùng hiện tại
+      return await db.getAll(this.cartStore).then(
+        (cartItems) => cartItems.filter((item) => item.userId === userId), // Chỉ lấy sản phẩm của người dùng hiện tại
       );
     }
     return await db.getAll(this.cartStore); // Lấy tất cả sản phẩm cho khách
   }
 
- // Thêm sản phẩm vào giỏ hàng
-async addToCart(product: { id: number; [key: string]: any }): Promise<void> {
-  const db = await this.dbPromise;
-  const userId = this.tokenService.getToken(); // Lấy userId từ token
+  // Thêm sản phẩm vào giỏ hàng
+  async addToCart(product: { id: number; [key: string]: any }): Promise<void> {
+    const db = await this.dbPromise;
+    const userId = this.tokenService.getToken(); // Lấy userId từ token
 
-  // Tạo khóa duy nhất cho sản phẩm dựa trên userId và productId
-  const uniqueKey = `${userId}-${product.id}`;
-  
-  // Kiểm tra sự tồn tại của sản phẩm trong giỏ hàng
-  const existingProduct = await db.get(this.cartStore, uniqueKey);
-  
-  if (!existingProduct) {
+    // Tạo khóa duy nhất cho sản phẩm dựa trên userId và productId
+    const uniqueKey = `${userId}-${product.id}`;
+
+    // Kiểm tra sự tồn tại của sản phẩm trong giỏ hàng
+    const existingProduct = await db.get(this.cartStore, uniqueKey);
+
+    if (!existingProduct) {
       // Thêm userId vào sản phẩm
       const productWithUserId = { ...product, userId }; // Thêm thuộc tính userId
       await db.put(this.cartStore, { ...productWithUserId, id: uniqueKey }); // Sử dụng uniqueKey làm id
       this.updateCartStatus(); // Cập nhật trạng thái giỏ hàng
       console.log(this.getCartItems());
-  } else {
-      console.warn(`Product with ID ${product.id} already exists in the cart for user ID ${userId}.`);
+    } else {
+      console.warn(
+        `Product with ID ${product.id} already exists in the cart for user ID ${userId}.`,
+      );
+    }
   }
-}
 
+  // Lấy sản phẩm chỉ định từ giỏ hàng
+  async getCartItemById(productId: number): Promise<any | undefined> {
+    const db = await this.dbPromise;
+    const userId = this.tokenService.getToken(); // Lấy userId từ token
+    const product = await db.get(this.cartStore, `${userId}-${productId}`); // Sử dụng khóa duy nhất
 
-// Lấy sản phẩm chỉ định từ giỏ hàng
-async getCartItemById(productId: number): Promise<any | undefined> {
-  const db = await this.dbPromise;
-  const userId = this.tokenService.getToken(); // Lấy userId từ token
-  const product = await db.get(this.cartStore, `${userId}-${productId}`); // Sử dụng khóa duy nhất
+    // Trả về sản phẩm nếu tồn tại
+    return product || undefined; // Nếu không tìm thấy
+  }
 
-  // Trả về sản phẩm nếu tồn tại
-  return product || undefined; // Nếu không tìm thấy
-}
+  // Xóa sản phẩm khỏi giỏ hàng
+  async removeFromCart(productId: number): Promise<void> {
+    const db = await this.dbPromise;
+    const userId = this.tokenService.getToken(); // Lấy userId từ token
+    const cartItems = await db.getAll(this.cartStore); // Lấy tất cả sản phẩm trong giỏ hàng
 
+    // Tìm sản phẩm trong giỏ hàng của người dùng hiện tại
+    const product = cartItems.find((item) => item.userId === userId);
 
-// Xóa sản phẩm khỏi giỏ hàng
-async removeFromCart(productId: number): Promise<void> {
-  const db = await this.dbPromise;
-  const userId = this.tokenService.getToken(); // Lấy userId từ token
-  const cartItems = await db.getAll(this.cartStore); // Lấy tất cả sản phẩm trong giỏ hàng
-
-  // Tìm sản phẩm trong giỏ hàng của người dùng hiện tại
-  const product = cartItems.find(item =>item.userId === userId);
-
-  if (product) {
+    if (product) {
       await db.delete(this.cartStore, productId); // Xóa sản phẩm
       this.updateCartStatus(); // Cập nhật trạng thái giỏ hàng
-  } else {
-      console.warn(`Product with ID ${productId} does not belong to the current user.`);
+    } else {
+      console.warn(
+        `Product with ID ${productId} does not belong to the current user.`,
+      );
+    }
   }
-}
 
+  // Xóa tất cả sản phẩm trong giỏ hàng
+  async clearCart(): Promise<void> {
+    const db = await this.dbPromise;
+    const userId = this.tokenService.getToken(); // Lấy userId từ token
+    const cart = await this.getCart();
 
-// Xóa tất cả sản phẩm trong giỏ hàng
-async clearCart(): Promise<void> {
-  const db = await this.dbPromise;
-  const userId = this.tokenService.getToken(); // Lấy userId từ token
-  const cart = await this.getCart();
+    // Xóa sản phẩm của người dùng hiện tại
+    const userProducts = cart.filter((item) => item.userId === userId);
+    const tx = db.transaction(this.cartStore, 'readwrite');
+    const store = tx.objectStore(this.cartStore);
 
-  // Xóa sản phẩm của người dùng hiện tại
-  const userProducts = cart.filter(item => item.userId === userId);
-  const tx = db.transaction(this.cartStore, 'readwrite');
-  const store = tx.objectStore(this.cartStore);
-
-  for (const product of userProducts) {
+    for (const product of userProducts) {
       await store.delete(product.id);
+    }
+
+    await tx.done; // Hoàn tất giao dịch
+    this.cartQuantity$.next(0); // Reset số lượng giỏ hàng
+    this.cartTotal$.next(0); // Reset tổng tiền giỏ hàng
   }
-
-  await tx.done; // Hoàn tất giao dịch
-  this.cartQuantity$.next(0); // Reset số lượng giỏ hàng
-  this.cartTotal$.next(0); // Reset tổng tiền giỏ hàng
-}
-
 
   // Hàm saveCart để lưu toàn bộ giỏ hàng vào IndexedDB
   async saveCart(cartItems: any[]): Promise<void> {

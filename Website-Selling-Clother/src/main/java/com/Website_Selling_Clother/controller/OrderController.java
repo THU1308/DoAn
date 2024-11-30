@@ -119,4 +119,34 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Cập nhật không thành công:" + e.getMessage());
         }
     }
+
+    // Lấy chi tiết đơn hàng theo ID
+    @GetMapping("/{id}")
+    public ResponseData<Order> getOrderById(@PathVariable int id) {
+        return orderService.getOrderById(id)
+                .map(order -> new ResponseData<>(HttpStatus.OK, "Success", order))
+                .orElse(new ResponseData<>(HttpStatus.NOT_FOUND, "Order not found"));
+    }
+
+    // Cập nhật trạng thái thanh toán
+    @PutMapping("/{id}/payment-status")
+    public ResponseData<Order> updatePaymentStatus(@PathVariable int id, @RequestParam String status) {
+        try {
+            Order updatedOrder = orderService.updatePaymentStatus(id, status);
+            return new ResponseData<>(HttpStatus.OK, "Payment status updated", updatedOrder);
+        } catch (Exception e) {
+            return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    // Xóa mềm đơn hàng
+    @DeleteMapping("/{id}")
+    public ResponseData<?> deleteOrder(@PathVariable int id) {
+        try {
+            orderService.softDeleteOrder(id);
+            return new ResponseData<>(HttpStatus.OK, "Order deleted successfully");
+        } catch (Exception e) {
+            return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

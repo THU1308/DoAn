@@ -17,4 +17,6 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
             "FROM orders " +
             "WHERE DATE(created_At) BETWEEN :startDate AND :endDate ", nativeQuery = true)
     Map<String, Long> getRevenueByDateRange(String startDate,String endDate);
+
+    List<Order> findByEnableTrue();
 }

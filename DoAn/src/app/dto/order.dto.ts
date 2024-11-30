@@ -1,5 +1,7 @@
 import { OrderDetailDto } from "./order-details.dto";
 export interface OrderDto {
+    id?: number;
+    firstName?: string;
     lastName: string;
     country: string;
     address: string;

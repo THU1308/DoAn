@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class OrderService implements IOrderService {
@@ -97,6 +98,32 @@ public class OrderService implements IOrderService {
         else {
             order.setEnable(true);
         }
+        orderRepository.save(order);
+    }
+
+    // Lấy danh sách đơn hàng chưa bị xóa
+    public List<Order> getAllOrders() {
+        return orderRepository.findByEnableTrue();
+    }
+
+    // Lấy thông tin chi tiết một đơn hàng
+    public Optional<Order> getOrderById(int id) {
+        return orderRepository.findById(id);
+    }
+
+    // Cập nhật trạng thái thanh toán của đơn hàng
+    public Order updatePaymentStatus(int id, String paymentStatus) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        order.setPayment_status(paymentStatus);
+        return orderRepository.save(order);
+    }
+
+    // Xóa mềm đơn hàng
+    public void softDeleteOrder(int id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        order.setEnable(false); // Đánh dấu là đã xóa
         orderRepository.save(order);
     }
 }

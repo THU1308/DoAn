@@ -7,6 +7,8 @@ import { OrderService } from '../../services/order/order.service';
 import { NgForm } from '@angular/forms';
 import { PaymentService } from '../../services/payment/paymentService';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/token.service';
+import { UserService } from 'src/app/services/user/user.service';
 @Component({
   selector: 'app-check-out',
   templateUrl: './check-out.component.html',
@@ -15,6 +17,7 @@ import { Router } from '@angular/router';
 export class CheckOutComponent {
   cartItems: CartDto[] = [];
   cartTotal: number = 0;
+  currentUserNameLogin : string = '';
 
   isLoading: boolean = false;
 
@@ -23,6 +26,7 @@ export class CheckOutComponent {
   message: string = '';
 
   order: OrderDto = {
+    firstName: '',
     lastName: '',
     country: '',
     address: '',
@@ -46,14 +50,26 @@ export class CheckOutComponent {
     private cartService: ShoppingCartService,
     private orderService: OrderService,
     private paymentService: PaymentService,
+    private tokenService: TokenService,
+    private userService : UserService
   ) {}
 
   private paymentResultSubscription: Subscription | undefined;
+  getCurrentUser() {
+    this.userService.getCurrenUserLogin().subscribe({
+      next: (res: any) => {
+        this.currentUserNameLogin = res.data.username;
+      },
+      error: (err) => console.error(err),
+    });
+  }
 
   ngOnInit() {
+    this.cartService.updateCartStore()
+    this.cartService.loadUserCart()
     this.loadCartItems(); // Tải sản phẩm giỏ hàng ngay khi component được khởi tạo)
     //console.log(this.cartService.getCartItems());
-    
+    this.getCurrentUser();
   }
 
   ngOnDestroy() {
@@ -64,10 +80,11 @@ export class CheckOutComponent {
 
   private async loadCartItems(): Promise<void> {
     const rawCartItems = await this.cartService.getCart(); // Lấy giỏ hàng từ IndexedDB
+    console.log(this.tokenService.getToken())
     console.log(rawCartItems);
     // Chuyển đổi các sản phẩm trong giỏ hàng sang CartDto[]
     this.cartItems = rawCartItems.map((item: any) => ({
-      productId: item.id,
+      productId:  parseInt(item.id.toString().split('-')[1], 10),
       productName: item.name,
       productPrice: item.price,
       productQuantity: item.productQuantity || 1, // Nếu không có số lượng, mặc định là 1
@@ -103,6 +120,7 @@ export class CheckOutComponent {
     // Now process based on selectedPaymentMethod
     if (this.selectedPaymentMethod === 'COD') {
       this.selectedPaymentMethod = 'pending';
+      debugger  
       this.processCODOrder(form);
     } else if (this.selectedPaymentMethod === 'VNPay') {
       this.makePayment(form);
@@ -122,6 +140,7 @@ export class CheckOutComponent {
   processCODOrder(form: NgForm) {
     this.order = {
       ...this.order,
+      firstName: form.value.firstName,
       lastName: form.value.lastName,
       country: form.value.country,
       address: form.value.address,
@@ -133,6 +152,7 @@ export class CheckOutComponent {
       phone: form.value.phone,
       totalPrice: this.cartTotal,
       paymentStatus: this.selectedPaymentMethod,
+      username : this.currentUserNameLogin
     };
 
     // Cập nhật chi tiết đơn hàng
@@ -186,7 +206,7 @@ export class CheckOutComponent {
 
     // Cập nhật chi tiết đơn hàng
     this.order.orderDetailDTOS = this.cartItems.map((item) => ({
-      productId: item.productId,
+      productId:  item.productId,
       price: item.productPrice,
       quantity: item.productQuantity,
       subTotal: item.productPrice * item.productQuantity,

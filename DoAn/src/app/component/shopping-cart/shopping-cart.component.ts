@@ -27,6 +27,8 @@ export class ShoppingCartComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.cartService.updateCartStore()
+    this.cartService.loadUserCart()
     this.loadCartItems(); // Tải sản phẩm giỏ hàng ngay khi component được khởi tạo
   }
 
@@ -35,7 +37,7 @@ export class ShoppingCartComponent implements OnInit {
     const rawCartItems = await this.cartService.getCart(); // Lấy giỏ hàng từ IndexedDB
     // Chuyển đổi các sản phẩm trong giỏ hàng sang CartDto[]
     this.cartItems = rawCartItems.map((item: any) => ({
-      productId: item.id,
+      productId:  item.id,
       productName: item.name,
       productPrice: item.price,
       productQuantity: item.productQuantity || 1, // Nếu không có số lượng, mặc định là 1
