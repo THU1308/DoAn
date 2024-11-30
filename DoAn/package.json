@@ -30,6 +30,7 @@
     "idb": "^8.0.0",
     "jquery": "^3.7.1",
     "ngx-build-plus": "^16.0.0",
+    "ngx-pagination": "^6.0.3",
     "node-polyfill-webpack-plugin": "^4.0.0",
     "owl.carousel": "^2.3.4",
     "primeicons": "^7.0.0",

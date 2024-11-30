@@ -267,7 +267,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-6" *ngFor="let product of displayedProducts$ | async">
+                        <div class="col-lg-4 col-md-6 col-sm-6" *ngFor="let product of listProduct | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
                             <div class="product__item">
                                 <div (click)="viewDetail(product.id)" class="product__item__pic set-bg"
                                     [ngStyle]="{'background-image': 'url(data:image/jpeg;base64,' + (product.images?.[0]?.data || '') + ')'}">
@@ -312,15 +312,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="product__pagination">
-                                <span *ngFor="let page of getPages(); let i = index">
-                                    <a [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
-                                </span>
-                            </div>
-                        </div>
+                        <pagination-controls style="display: flex; justify-content: center; padding: 2rem;" (pageChange)="currentPage = $event"></pagination-controls>
                     </div>
                 </div>
             </div>

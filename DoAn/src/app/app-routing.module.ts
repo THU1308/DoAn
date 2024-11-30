@@ -19,6 +19,7 @@ import { AdminBannerComponent } from './admin-banner/admin-banner.component';
 import { AdminBlogComponent } from './admin-blog/admin-blog.component';
 import { AdminUserComponent } from './admin-user/admin-user.component';
 import { AdminProductComponent } from './admin-product/admin-product.component';
+import { AdminInventoryComponent } from './admin-inventory/admin-inventory.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,7 @@ const routes: Routes = [
   { path: 'admin/blog', component: AdminBlogComponent},
   { path: 'admin/user', component: AdminUserComponent},
   { path: 'admin/product', component: AdminProductComponent},
+  {path:'admin/inventory',component: AdminInventoryComponent},
   { path: '**', redirectTo: '' },
 ];
 

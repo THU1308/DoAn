@@ -1,0 +1,121 @@
+    <!DOCTYPE html>
+    <html lang="vi">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+    </head>
+
+    <body>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/admin/category">Dashboard</a></li>
+                <li><a href="/admin/products">Sản phẩm</a></li>
+                <li><a href="/admin/orders">Đơn hàng</a></li>
+                <li><a href="/admin/customers">Khách hàng</a></li>
+                <li><a href="/admin/reports">Thống kê</a></li>
+                <li><a href="/logout">Đăng xuất</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="logo">Admin - Web Thời Trang</div>
+                <div class="user-info">
+                    <span>Chào, Admin</span>
+                    <span><a href="/logout">Đăng xuất</a></span>
+                </div>
+            </div>
+
+            <app-preloader [isLoading]="isLoading"></app-preloader>
+            <app-notification [showNotification]="showNotification" [message]="message"
+                (closeNotification)="showNotification"></app-notification>
+
+                <div class="inventory-container">
+                    <h1>Quản Lý Tồn Kho</h1>
+                    
+                    <!-- Nút Quay lại -->
+                    <button (click)="goBack()" class="back-button">Quay lại</button>
+                  
+                    <!-- Tổng số lượng tồn kho -->
+                    <div class="summary">
+                      <h3>Tổng số lượng tồn kho: {{ totalStock }}</h3>
+                    </div>
+                  
+                    <!-- Tìm kiếm sản phẩm -->
+                    <div class="search">
+                      <label for="search-query">Tìm sản phẩm:</label>
+                      <input
+                        type="text"
+                        id="search-query"
+                        [(ngModel)]="searchQuery"
+                        (input)="searchProducts(searchQuery)"
+                        placeholder="Nhập tên sản phẩm"
+                      />
+                    </div>
+                  
+                    <!-- Danh sách sản phẩm tìm kiếm -->
+                    <div class="search-results" *ngIf="products.length > 0">
+                      <h4>Kết quả tìm kiếm:</h4>
+                      <ul>
+                        <li *ngFor="let product of products" (click)="selectProduct(product.id)">
+                          {{ product.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  
+                    <!-- Lọc sản phẩm theo ID -->
+                    <div class="filter">
+                      <label for="product-id">Tìm tồn kho theo sản phẩm:</label>
+                      <input
+                        type="number"
+                        id="product-id"
+                        [(ngModel)]="selectedProductId"
+                        placeholder="Nhập ID sản phẩm"
+                      />
+                      <button (click)="loadStockByProduct()">Lấy tồn kho</button>
+                    </div>
+                  
+                    <!-- Danh sách sản phẩm tồn kho thấp -->
+                    <div class="low-stock">
+                        <h3>Sản phẩm gần hết hàng (Số lượng dưới {{ lowStockThreshold }})</h3>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Sản phẩm</th>
+                              <th>Size</th>
+                              <th>Số lượng</th>
+                              <th>Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let product of productSizes | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+                              <td>{{ product.product.name }}</td>
+                              <td>{{ product.size.name }}</td>
+                              <td>{{ product.quantity }}</td>
+                              <td>
+                                <button (click)="updateStock(product.product.id, product.size.id, product.quantity + 1)">+</button>
+                                <button (click)="updateStock(product.product.id, product.size.id, product.quantity - 1)" [disabled]="product.quantity <= 0">-</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      
+                        <!-- Phân trang -->
+                        <pagination-controls style="display: flex; justify-content: center; padding: 2rem;" (pageChange)="currentPage = $event"></pagination-controls>
+                      </div>
+                      
+                  </div>
+                  
+                  
+
+        </div>
+
+    </body>
+
+    </html>

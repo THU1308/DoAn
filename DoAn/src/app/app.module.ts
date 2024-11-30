@@ -33,8 +33,11 @@ import { AdminSizeComponent } from './admin-size/admin-size.component';
 import { AdminBannerComponent } from './admin-banner/admin-banner.component';
 import { AdminBlogComponent } from './admin-blog/admin-blog.component';
 import { AdminUserComponent } from './admin-user/admin-user.component';
-import { AdminProductComponent } from './admin-product/admin-product.component'; 
+import { AdminProductComponent } from './admin-product/admin-product.component';
+import { AdminInventoryComponent } from './admin-inventory/admin-inventory.component'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { NgxPaginationModule } from 'ngx-pagination'; 
 
 @NgModule({
   declarations: [
@@ -64,6 +67,7 @@ import { AdminProductComponent } from './admin-product/admin-product.component';
    AdminBlogComponent,
    AdminUserComponent,
    AdminProductComponent,
+   AdminInventoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,6 +77,8 @@ import { AdminProductComponent } from './admin-product/admin-product.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatSnackBarModule,
+    NgxPaginationModule
   ],
   providers: [
     {

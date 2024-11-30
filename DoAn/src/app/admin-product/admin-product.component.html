@@ -138,7 +138,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let product of products">
+                    <tr *ngFor="let product of products | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" >
                         <td>{{ product.id }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.price | currency }}</td>
@@ -153,6 +153,7 @@
                     </tr>
                 </tbody>
             </table>
+            <pagination-controls style="display: flex; justify-content: center; padding: 2rem;" (pageChange)="currentPage = $event"></pagination-controls>
 
             <!-- Loading Spinner -->
             <app-preloader *ngIf="isLoading" [isLoading]="isLoading"></app-preloader>

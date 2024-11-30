@@ -18,6 +18,10 @@ export class AdminProductComponent {
   isLoading: boolean = false;
   message: string = '';
 
+    // Các thuộc tính phân trang
+    currentPage: number = 1; // Trang hiện tại
+    itemsPerPage: number = 8; // Số mục hiển thị mỗi trang
+
   timeoutNotification(milisecon: number) {
     setTimeout(() => {
       this.showNotification = false;

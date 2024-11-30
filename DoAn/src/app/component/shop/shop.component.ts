@@ -35,9 +35,10 @@ export class ShopComponent implements OnInit {
 
   listProduct: ProductDetailDto[] = [];
   images: ImageDto[] = [];
-  currentPage = 1; // Start with page 1
-  productsPerPage = 12; // Display 12 products per page
-  totalPages = 0; // Total number of pages
+
+   // Các thuộc tính phân trang
+   currentPage: number = 1; // Trang hiện tại
+   itemsPerPage: number = 6; // Số mục hiển thị mỗi trang
   displayedProducts: ProductDetailDto[] = []; // Array to hold displayed products
   listCategory: CategoryDto[] = [];
 
@@ -45,8 +46,8 @@ export class ShopComponent implements OnInit {
   selectedCategory: CategoryDto | null = null;
   selectedPriceRange: string | null = null;
 
-  private displayedProductsSubject = new Subject<ProductDetailDto[]>();
-  displayedProducts$ = this.displayedProductsSubject.asObservable();
+  // private displayedProductsSubject = new Subject<ProductDetailDto[]>();
+  // displayedProducts$ = this.displayedProductsSubject.asObservable();
 
   //search
   suggestions$: Observable<any>;
@@ -171,10 +172,10 @@ export class ShopComponent implements OnInit {
       }
 
       // Cập nhật sản phẩm hiển thị
-      this.totalPages = Math.ceil(
-        this.listProduct.length / this.productsPerPage,
-      );
-      this.updateDisplayedProducts();
+      // this.totalPages = Math.ceil(
+      //   this.listProduct.length / this.productsPerPage,
+      // );
+      //this.updateDisplayedProducts();
       //this.isLoading = false;
     } catch (error) {
       console.log(error);
@@ -225,7 +226,7 @@ export class ShopComponent implements OnInit {
         next: (response: any) => {
           //debugger;
           this.listProduct = response.data;
-          this.updateDisplayedProducts();
+          //this.updateDisplayedProducts();
           this.changeDetectorRef.detectChanges();
           this.isLoading = false;
         },
@@ -242,7 +243,7 @@ export class ShopComponent implements OnInit {
       next: (response: any) => {
         debugger;
         this.listProduct = response.data;
-        this.updateDisplayedProducts();
+        //this.updateDisplayedProducts();
         this.changeDetectorRef.detectChanges();
         this.isLoading = false;
       },
@@ -274,7 +275,7 @@ export class ShopComponent implements OnInit {
       this.isLoading = true;
       this.listProduct = this.listProduct.sort((a, b) => a.price - b.price);
       this.isLoading = false;
-      this.updateDisplayedProducts();
+      //this.updateDisplayedProducts();
       this.changeDetectorRef.detectChanges();
     }
 
@@ -282,7 +283,7 @@ export class ShopComponent implements OnInit {
       this.isLoading = true;
       this.listProduct = this.listProduct.sort((a, b) => b.price - a.price);
       this.isLoading = false;
-      this.updateDisplayedProducts();
+      //this.updateDisplayedProducts();
       this.changeDetectorRef.detectChanges();
     }
   }
@@ -329,32 +330,32 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  updateDisplayedProducts() {
-    this.totalPages = Math.ceil(this.listProduct.length / this.productsPerPage);
-    const startIndex = (this.currentPage - 1) * this.productsPerPage;
-    const endIndex = startIndex + this.productsPerPage;
-    this.displayedProducts = this.listProduct.slice(startIndex, endIndex);
-    this.displayedProductsSubject.next(this.displayedProducts);
-  }
+  // updateDisplayedProducts() {
+  //   this.totalPages = Math.ceil(this.listProduct.length / this.productsPerPage);
+  //   const startIndex = (this.currentPage - 1) * this.productsPerPage;
+  //   const endIndex = startIndex + this.productsPerPage;
+  //   this.displayedProducts = this.listProduct.slice(startIndex, endIndex);
+  //   this.displayedProductsSubject.next(this.displayedProducts);
+  // }
 
   public viewDetail(id: number) {
     this.router.navigate(['/product', id]);
   }
 
-  // Pagination methods
-  goToPage(page: number) {
-    this.currentPage = page;
-    this.updateDisplayedProducts();
-    this.router.navigate(['/shop'], {
-      queryParams: { page: this.currentPage },
-    }); // Update URL
-  }
+  // // Pagination methods
+  // goToPage(page: number) {
+  //   this.currentPage = page;
+  //   this.updateDisplayedProducts();
+  //   this.router.navigate(['/shop'], {
+  //     queryParams: { page: this.currentPage },
+  //   }); // Update URL
+  // }
 
-  getPages(): number[] {
-    const pages: number[] = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
+  // getPages(): number[] {
+  //   const pages: number[] = [];
+  //   for (let i = 1; i <= this.totalPages; i++) {
+  //     pages.push(i);
+  //   }
+  //   return pages;
+  // }
 }
