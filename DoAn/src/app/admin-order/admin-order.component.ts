@@ -59,7 +59,7 @@ export class AdminOrderComponent implements OnInit {
   editPaymentStatus(order: Order): void {
     this.orderService.updatePaymentStatus(order.id, order.paymentStatus).subscribe({
       next: (updatedOrder) => {
-        order.paymentStatus = updatedOrder.payment_status; // Cập nhật trạng thái của order
+        order.paymentStatus = updatedOrder.payment_status; 
         this.loadOrders()
         this.showSnackBar('Payment status updated!');
       },

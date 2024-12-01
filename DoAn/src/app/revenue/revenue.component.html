@@ -2,140 +2,135 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
 </head>
 
 <body>
 
-    <!-- Sidebar -->
-    <nav class="sidebar">
-        <ul>
-            <li><a href="/admin/category">Dashboard</a></li>
-            <li><a href="/admin/products">Sản phẩm</a></li>
-            <li><a href="/admin/orders">Đơn hàng</a></li>
-            <li><a href="/admin/customers">Khách hàng</a></li>
-            <li><a href="/admin/reports">Thống kê</a></li>
-            <li><a href="/logout">Đăng xuất</a></li>
-        </ul>
-    </nav>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/admin/category">Dashboard</a></li>
+      <li><a href="/admin/products">Sản phẩm</a></li>
+      <li><a href="/admin/orders">Đơn hàng</a></li>
+      <li><a href="/admin/customers">Khách hàng</a></li>
+      <li><a href="/admin/reports">Thống kê</a></li>
+      <li><a href="/logout">Đăng xuất</a></li>
+    </ul>
+  </nav>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Topbar -->
-        <div class="topbar">
-            <div class="logo">Admin - Web Thời Trang</div>
-            <div class="user-info">
-                <span>Chào, Admin</span>
-                <span><a href="/logout">Đăng xuất</a></span>
-            </div>
-        </div>
-        
-        <div class="container">
-            <h2>Statistics</h2>
-            <label for="statistic-select">Choose a statistic to display:</label>
-            <select id="statistic-select" (change)="onSelectChange($event)">
-              <option value="total">Total Revenue</option>
-              <option value="daily">Revenue by Date</option>
-              <option value="monthly">Revenue by Month</option>
-              <option value="yearly">Revenue by Year</option>
-            </select>
-          
-            <div *ngIf="selectedOption === 'total' && orderStatistics">
-              <h3>Total Orders: {{ orderStatistics.totalOrders }}</h3>
-              <h3>Total Revenue: {{ orderStatistics.totalRevenue | currency }}</h3>
-              <canvas baseChart
-                      [datasets]="chartData.datasets"
-                      [labels]="chartData.labels"
-                      [type]="chartType"
-                      [options]="chartOptions">
-              </canvas>
-            </div>
-          
-            <div *ngIf="selectedOption === 'daily'">
-              <h3>Revenue by Date</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Total Revenue</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let revenue of revenueByDate">
-                    <td>{{ revenue.date }}</td>
-                    <td>{{ revenue.totalRevenue | currency }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <canvas baseChart
-                      [datasets]="chartData.datasets"
-                      [labels]="chartData.labels"
-                      [type]="chartType"
-                      [options]="chartOptions">
-              </canvas>
-            </div>
-          
-            <div *ngIf="selectedOption === 'monthly'">
-              <h3>Revenue by Month</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Month</th>
-                    <th>Year</th>
-                    <th>Total Revenue</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let revenue of revenueByMonth">
-                    <td>{{ revenue.month }}</td>
-                    <td>{{ revenue.year }}</td>
-                    <td>{{ revenue.totalRevenue | currency }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <canvas baseChart
-                      [datasets]="chartData.datasets"
-                      [labels]="chartData.labels"
-                      [type]="chartType"
-                      [options]="chartOptions">
-              </canvas>
-            </div>
-          
-            <div *ngIf="selectedOption === 'yearly'">
-              <h3>Revenue by Year</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Year</th>
-                    <th>Total Revenue</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let revenue of revenueByYear">
-                    <td>{{ revenue.year }}</td>
-                    <td>{{ revenue.totalRevenue | currency }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <canvas baseChart
-                      [datasets]="chartData.datasets"
-                      [labels]="chartData.labels"
-                      [type]="chartType"
-                      [options]="chartOptions">
-              </canvas>
-            </div>
-          </div>
-          
-          
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="logo">Admin - Web Thời Trang</div>
+      <div class="user-info">
+        <span>Chào, Admin</span>
+        <span><a href="/logout">Đăng xuất</a></span>
+      </div>
     </div>
+
+    <div class="container">
+      <h2>Statistics</h2>
+      <label for="statistic-select">Choose a statistic to display:</label>
+      <select id="statistic-select" (change)="onSelectChange($event)">
+        <option value="total">Total Revenue</option>
+        <option value="daily">Revenue by Date</option>
+        <option value="monthly">Revenue by Month</option>
+        <option value="yearly">Revenue by Year</option>
+      </select>
+    
+      <!-- Total Revenue -->
+      <div *ngIf="selectedOption === 'total' && orderStatistics">
+        <h3>Total Orders: {{ orderStatistics.totalOrders }}</h3>
+        <h3>Total Revenue: {{ orderStatistics.totalRevenue | vndCurrency }}</h3>
+        <button (click)="exportToExcel([orderStatistics], 'Total_Revenue')">Export to Excel</button>
+        <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [type]="chartType"
+          [options]="chartOptions"></canvas>
+      </div>
+    
+      <!-- Revenue by Date -->
+      <div *ngIf="selectedOption === 'daily'">
+        <button (click)="exportToExcel(revenueByDate, 'Revenue_By_Date')">Export to Excel</button>
+        <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [type]="chartType"
+          [options]="chartOptions"></canvas>
+        <h3>Revenue by Date</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let revenue of revenueByDate | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+              <td>{{ revenue.date }}</td>
+              <td>{{ revenue.totalRevenue | vndCurrency }}</td>
+            </tr>
+          </tbody>
+          <pagination-controls style="display: flex; justify-content: center; padding: 2rem;"
+            (pageChange)="currentPage = $event"></pagination-controls>
+        </table>
+      </div>
+    
+      <!-- Revenue by Month -->
+      <div *ngIf="selectedOption === 'monthly'">
+        <button (click)="exportToExcel(revenueByMonth, 'Revenue_By_Month')">Export to Excel</button>
+        <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [type]="chartType"
+          [options]="chartOptions"></canvas>
+        <h3>Revenue by Month</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let revenue of revenueByMonth | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+              <td>{{ revenue.month }}</td>
+              <td>{{ revenue.year }}</td>
+              <td>{{ revenue.totalRevenue | vndCurrency }}</td>
+            </tr>
+          </tbody>
+          <pagination-controls style="display: flex; justify-content: center; padding: 2rem;"
+            (pageChange)="currentPage = $event"></pagination-controls>
+        </table>
+      </div>
+    
+      <!-- Revenue by Year -->
+      <div *ngIf="selectedOption === 'yearly'">
+        <button (click)="exportToExcel(revenueByYear, 'Revenue_By_Year')">Export to Excel</button>
+        <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [type]="chartType"
+          [options]="chartOptions"></canvas>
+        <h3>Revenue by Year</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let revenue of revenueByYear | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+              <td>{{ revenue.year }}</td>
+              <td>{{ revenue.totalRevenue | vndCurrency }}</td>
+            </tr>
+          </tbody>
+          <pagination-controls style="display: flex; justify-content: center; padding: 2rem;"
+            (pageChange)="currentPage = $event"></pagination-controls>
+        </table>
+      </div>
+    </div>
+    
+  </div>
 
 </body>
 
 </html>
-
-
-
-
-  
