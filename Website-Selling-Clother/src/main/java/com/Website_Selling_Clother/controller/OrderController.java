@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "*",maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("${api.prefix}/order")
 public class OrderController {
 
@@ -36,16 +36,16 @@ public class OrderController {
     EmailService emailService;
 
     @GetMapping("")
-    public ResponseEntity<List<Order>> getList(){
+    public ResponseEntity<List<Order>> getList() {
         List<Order> list = orderService.getAllListOrder();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<?> getListProductOrder(){
+    public ResponseEntity<?> getListProductOrder() {
         List<OrderDetail> resultList = orderDetailRepository.findAll();
         List<OrderDetailResponse> responses = new ArrayList<>();
-        for (var item:resultList) {
+        for (var item : resultList) {
             OrderDetailResponse detailResponse = new OrderDetailResponse();
             detailResponse.setProduct(item.getProduct());
             detailResponse.setQuantity(item.getQuantity());
@@ -60,11 +60,11 @@ public class OrderController {
         Collections.sort(responses, idComparator);
         int count = 0;
         List<OrderDetailResponse> responses1 = new ArrayList<>();
-        for (int i = 0; i < responses.size() - 2 ; i = i + count+ 1) {
+        for (int i = 0; i < responses.size() - 2; i = i + count + 1) {
             OrderDetailResponse orderDetailResponse = responses.get(i);
             count = 0;
-            for (int j = i+1; j <= responses.size() - 1 ; j++) {
-                if (orderDetailResponse.getProduct() == responses.get(j).getProduct()){
+            for (int j = i + 1; j <= responses.size() - 1; j++) {
+                if (orderDetailResponse.getProduct() == responses.get(j).getProduct()) {
                     orderDetailResponse.setQuantity(orderDetailResponse.getQuantity() + responses.get(j).getQuantity());
                     count++;
                 }
@@ -84,13 +84,13 @@ public class OrderController {
     @GetMapping("/revenue")
     public ResponseEntity<?> getRevenueByDateRange(
             @RequestParam("startDate") String startDate,
-            @RequestParam("endDate") String  endDate) {
+            @RequestParam("endDate") String endDate) {
         Map<String, Long> revenueMap = orderService.getRevenueByDate(startDate, endDate);
         return ResponseEntity.ok(revenueMap);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getListByUser(@RequestParam("username") String username){
+    public ResponseEntity<?> getListByUser(@RequestParam("username") String username) {
         List<Order> list = null;
         try {
             list = orderService.getOrderByUserName(username);
@@ -102,23 +102,23 @@ public class OrderController {
 
     @PostMapping("/create")
     @Transactional
-    public ResponseData<String> placeOrder(@RequestBody OrderDTO orderDTO){
+    public ResponseData<String> placeOrder(@RequestBody OrderDTO orderDTO) {
         try {
             orderService.placeOrder(orderDTO);
             emailService.sendOrderEmail(orderDTO);
-            return new ResponseData<>(HttpStatus.OK,"Success","Order thành công");
+            return new ResponseData<>(HttpStatus.OK, "Success", "Order thành công");
         } catch (DataNotFoundException e) {
-            return new ResponseData<>(HttpStatus.OK,"Fail","Order thất bại");
+            return new ResponseData<>(HttpStatus.OK, "Fail", "Order thất bại");
         }
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')")
-    public ResponseEntity<?> enableOrderById(@PathVariable int id){
+    public ResponseEntity<?> enableOrderById(@PathVariable int id) {
         try {
             orderService.enableOrder(id);
             return ResponseEntity.ok("Cập nhật thành công");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Cập nhật không thành công:" + e.getMessage());
         }
     }
@@ -152,26 +152,4 @@ public class OrderController {
             return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
-
-
-    @GetMapping("/export/report")
-    public ResponseEntity<byte[]> exportOrderReport(
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date start = dateFormat.parse(startDate);
-            Date end = dateFormat.parse(endDate);
-
-            ByteArrayInputStream reportStream = orderService.generateOrderReport(start, end);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=order_report.csv");
-            return ResponseEntity.ok().headers(headers).body(reportStream.readAllBytes());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-
 }

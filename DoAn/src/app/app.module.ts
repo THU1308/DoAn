@@ -27,7 +27,6 @@ import { CheckOutComponent } from './component/check-out/check-out.component';
 import { PaymentResultComponent } from './component/payment-result/payment-result.component';
 import { ChatComponent } from './chat/chat.component';
 import { CategoryAdminComponent } from './category-admin/category-admin.component';
-import { ButtonModule } from 'primeng/button';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminSizeComponent } from './admin-size/admin-size.component';
 import { AdminBannerComponent } from './admin-banner/admin-banner.component';
@@ -41,10 +40,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AdminOrderComponent } from './admin-order/admin-order.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { BaseChartDirective } from 'ng2-charts';
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -60,23 +55,24 @@ import { BaseChartDirective } from 'ng2-charts';
     BlogDetailsComponent,
     ContactComponent,
     LoginComponent,
-    VndCurrencyPipe,
+    VndCurrencyPipe, // Giữ lại một lần
     PreloaderComponent,
-   BlogPageComponent,
-   NotificationComponent,
-   CheckOutComponent,
-   PaymentResultComponent,
-   ChatComponent,
-   CategoryAdminComponent,
-   DashboardComponent,
-   AdminSizeComponent,
-   AdminBannerComponent,
-   AdminBlogComponent,
-   AdminUserComponent,
-   AdminProductComponent,
-   AdminInventoryComponent,
-   AdminOrderComponent,
-  RevenueComponent,
+    BlogPageComponent,
+    NotificationComponent,
+    CheckOutComponent,
+    PaymentResultComponent,
+    ChatComponent,
+    CategoryAdminComponent,
+    DashboardComponent,
+    AdminSizeComponent,
+    AdminBannerComponent,
+    AdminBlogComponent,
+    AdminUserComponent,
+    AdminProductComponent,
+    AdminInventoryComponent,
+    AdminOrderComponent,
+    RevenueComponent,
+    PreloaderComponent
   ],
   imports: [
     BrowserModule,
@@ -89,6 +85,8 @@ import { BaseChartDirective } from 'ng2-charts';
     MatSnackBarModule,
     NgxPaginationModule,
     BaseChartDirective,
+    MatSnackBarModule,
+    NgxPaginationModule
   ],
   providers: [
     {

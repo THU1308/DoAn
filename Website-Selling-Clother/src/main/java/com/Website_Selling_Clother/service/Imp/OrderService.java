@@ -128,11 +128,11 @@ public class OrderService implements IOrderService {
     }
 
     // Lấy các đơn hàng hoàn tất trong khoảng thời gian
-    public List<Order> getOrdersBetweenDates(Date startDate, Date endDate) {
-        return orderRepository.findByCreateAtBetweenAndPaymentStatus(startDate, endDate, "completed");
+    public List<Order> getOrdersBetweenDates(Date startDate, Date endDate, String paymentStatus) {
+        return orderRepository.findByCreateAtBetweenAndPaymentStatus(startDate, endDate,  paymentStatus);
     }
-    public ByteArrayInputStream generateOrderReport(Date startDate, Date endDate) {
-        List<Order> orders = getOrdersBetweenDates(startDate, endDate);
+    public ByteArrayInputStream generateOrderReport(Date startDate, Date endDate,String paymentStatus) {
+        List<Order> orders = getOrdersBetweenDates(startDate, endDate,paymentStatus);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintWriter writer = new PrintWriter(outputStream);

@@ -73,66 +73,158 @@
     text-decoration: none;
     margin-left: 10px;
   }
- 
-/* CSS cho container */
+
+
+  /* CSS for the container */
 .container {
-  max-width: 800px; /* Giới hạn độ rộng */
-  margin: 20px auto; /* Căn giữa container */
-  padding: 20px; /* Thêm padding */
-  border: 1px solid #dee2e6; /* Thêm viền */
-  border-radius: 8px; /* Bo tròn góc */
-  background-color: #f8f9fa; /* Màu nền nhạt */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
+  max-width: 800px; /* Limit the width */
+  margin: 20px auto; /* Center the container */
+  padding: 20px; /* Add padding */
+  border: 1px solid #dee2e6; /* Add border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #ffffff; /* White background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for the container */
 }
 
-/* CSS cho tiêu đề */
-h2 {
-  color: #343a40; /* Màu chữ tối */
-  text-align: center; /* Căn giữa tiêu đề */
-  margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+/* Styles for the date range section */
+.date-range {
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between elements */
+  margin-bottom: 20px; /* Space below date range */
 }
 
-/* CSS cho label và select */
+/* Styles for labels and inputs */
 label {
-  display: block; /* Hiển thị label như một khối */
-  margin-bottom: 10px; /* Thêm khoảng cách dưới label */
-  font-weight: bold; /* Làm đậm chữ */
+  margin-right: 10px; /* Space between label and input */
 }
 
-select {
-  width: 100%; /* Chiếm toàn bộ chiều rộng */
-  padding: 10px; /* Thêm padding */
-  border: 1px solid #ced4da; /* Viền cho select */
-  border-radius: 5px; /* Bo tròn góc cho select */
-  margin-bottom: 20px; /* Thêm khoảng cách dưới select */
+/* Button group styles */
+.button-group {
+  display: flex; /* Use flexbox for button alignment */
+  justify-content: center; /* Center buttons */
+  margin-bottom: 20px; /* Space below button group */
 }
 
-/* CSS cho bảng */
+/* General button styles */
+button {
+  margin: 0 10px; /* Margin for spacing between buttons */
+  padding: 10px 20px; /* Padding for buttons */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
+}
+
+/* Specific button colors */
+.get-statistics-btn {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+}
+
+.export-excel-btn {
+  background-color: #28a745; /* Green background */
+  color: white; /* White text */
+}
+
+.reset-btn {
+  background-color: #dc3545; /* Red background */
+  color: white; /* White text */
+}
+
+/* Hover effects */
+.get-statistics-btn:hover, 
+.export-excel-btn:hover,
+.reset-btn:hover {
+  opacity: 0.9; /* Slight opacity on hover */
+}
+
+/* Table styles */
 table {
-  width: 100%; /* Chiếm toàn bộ chiều rộng */
-  border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
-  margin-bottom: 20px; /* Thêm khoảng cách dưới bảng */
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+  margin-bottom: 20px; /* Space below tables */
 }
 
 th, td {
-  padding: 12px; /* Thêm padding cho ô */
-  text-align: left; /* Căn trái cho văn bản */
-  border-bottom: 1px solid #dee2e6; /* Viền dưới cho các ô */
+  padding: 12px; /* Padding for table cells */
+  text-align: left; /* Left align text */
+  border-bottom: 1px solid #dee2e6; /* Bottom border */
 }
 
 th {
-  background-color: #007bff; /* Màu nền cho header bảng */
-  color: white; /* Màu chữ trắng cho header bảng */
+  background-color: #007bff; /* Blue background for header */
+  color: white; /* White text for header */
 }
 
-/* CSS cho biểu đồ */
+/* Chart styles */
 canvas {
-  max-width: 100%; /* Đảm bảo biểu đồ không vượt quá chiều rộng của container */
-  margin-top: 20px; /* Thêm khoảng cách trên cho biểu đồ */
+  max-width: 100%; /* Ensure charts are responsive */
+  margin-top: 20px; /* Space above charts */
 }
 
-/* CSS cho các tiêu đề phụ */
-h3 {
-  color: #495057; /* Màu chữ tối */
-  margin-top: 20px; /* Thêm khoảng cách trên cho tiêu đề phụ */
+/* Pagination controls */
+.pagination-controls {
+  display: flex; 
+  justify-content: center; 
+  padding: 2rem; /* Padding for pagination */
+}
+/* Styles for the select box */
+select {
+  padding: 10px; /* Padding for the select box */
+  border: 1px solid #ced4da; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #ffffff; /* White background */
+  font-size: 16px; /* Font size */
+  color: #495057; /* Dark gray text color */
+  cursor: pointer; /* Pointer cursor */
+  width: 100%; /* Full width */
+  transition: border-color 0.3s; /* Transition for border color */
+}
+
+/* Select box hover effect */
+select:hover {
+  border-color: #007bff; /* Change border color on hover */
+}
+
+/* Select box focus effect */
+select:focus {
+  outline: none; /* Remove default outline */
+  border-color: #007bff; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow for focus effect */
+}
+/* Styles for date input fields */
+input[type="date"] {
+  padding: 10px; /* Padding for the input */
+  border: 1px solid #ced4da; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #ffffff; /* White background */
+  font-size: 16px; /* Font size */
+  color: #495057; /* Dark gray text color */
+  width: 100%; /* Full width */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+/* Date input hover effect */
+input[type="date"]:hover {
+  border-color: #007bff; /* Change border color on hover */
+}
+
+/* Date input focus effect */
+input[type="date"]:focus {
+  outline: none; /* Remove default outline */
+  border-color: #007bff; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow for focus effect */
+}
+
+/* Styles for date input placeholder */
+input[type="date"]::placeholder {
+  color: #6c757d; /* Placeholder color */
+  opacity: 1; /* Ensure placeholder is visible */
+}
+#combinedChart {
+  max-width: 400px; /* Hoặc bất kỳ kích thước nào bạn muốn */
+  max-height: 400px; 
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
