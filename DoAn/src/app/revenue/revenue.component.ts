@@ -253,7 +253,6 @@ export class RevenueComponent implements OnInit {
     }
   }
 
-
   exportToExcel(data: any[], fileName: string): void {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data); // Chuyển đổi dữ liệu sang sheet
     const wb: XLSX.WorkBook = XLSX.utils.book_new(); // Tạo workbook mới

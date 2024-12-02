@@ -110,6 +110,7 @@ public class UserController {
     }
 
     @PostMapping("/resetPw")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public ResponseData<String> resetPassword(@RequestParam String email) {
         try {

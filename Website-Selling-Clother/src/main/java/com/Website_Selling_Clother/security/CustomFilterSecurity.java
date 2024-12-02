@@ -50,50 +50,41 @@ public class CustomFilterSecurity {
                 .cors(cors -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-                    configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-                    configuration.setAllowedHeaders(Arrays.asList("authorization","content-type","x-auth-token"));
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                    configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
                     configuration.setExposedHeaders(List.of("x-auth-token"));
-                    configuration.setAllowCredentials(true);  // Đảm bảo cho phép credentials
+                    configuration.setAllowCredentials(true);  // Cho phép credentials
                     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                     source.registerCorsConfiguration("/**", configuration);
                     cors.configurationSource(source);
                 })
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(
-                                    String.format("%s/login/signin", apiPrefix)
-                            )
-                            .permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/login/signup", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/user/resetPw", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/category/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/product/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/tag/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/blog/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/image/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/order/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/user/**", apiPrefix)).authenticated()
-                            .requestMatchers(GET,
-                                    String.format("%s/size/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/banner/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/product-size/**", apiPrefix)).permitAll()
+                    auth.requestMatchers(String.format("%s/login/signin", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/login/signup", apiPrefix)).permitAll()
+                            .requestMatchers(POST, String.format("%s/user/resetPw", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/category/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/product/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/tag/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/blog/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/image/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/order/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/user/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/size/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/banner/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/product-size/**", apiPrefix)).permitAll()
                             .requestMatchers("/ws/**").permitAll()  // Cho phép tất cả các yêu cầu WebSocket không cần xác thực
-                            .anyRequest()
-                            .authenticated();
-                });
+                            .anyRequest().authenticated();
+                })
+                // Thêm xử lý cho lỗi Unauthorized và Access Denied
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                                .accessDeniedHandler(new CustomAccessDeniedHandler())
+                );
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

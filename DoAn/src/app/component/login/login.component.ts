@@ -41,7 +41,7 @@ export class LoginComponent {
           this.tokenService.setToken(response.data.token);
           debugger
           alert('Đăng nhập thành công');
-        
+          this.cartService.initializeCartOnLogin()
           this.cartService.loadUserCart()
           this.router.navigate(['']);
         } else {

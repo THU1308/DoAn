@@ -10,6 +10,7 @@ import com.Website_Selling_Clother.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -26,6 +27,7 @@ public class StatisticsController {
     private OrderRepository orderRepository;
 
     @GetMapping("/orders")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<OrderStatisticsDTO> getOrderStatistics(@RequestParam(required = false) String startDate,
                                                                  @RequestParam(required = false) String endDate) {
 
@@ -61,6 +63,7 @@ public class StatisticsController {
 
 
     @GetMapping("/revenue/date")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<RevenueByDateDTO>> getRevenueByDate(
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate) {
@@ -81,6 +84,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/revenue/month")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<RevenueByMonthDTO>> getRevenueByMonth(
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate) {
@@ -101,6 +105,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/revenue/year")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<RevenueByYearDTO>> getRevenueByYear(
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate) {
@@ -121,6 +126,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/between")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseData<List<Order>> getOrderBetween(
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
