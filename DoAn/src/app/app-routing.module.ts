@@ -44,7 +44,7 @@ const routes: Routes = [
   { path: 'admin/blog', component: AdminBlogComponent},
   { path: 'admin/user', component: AdminUserComponent},
   { path: 'admin/product', component: AdminProductComponent},
-  {path:'admin/inventory',component: AdminInventoryComponent},
+  {path:  'admin/inventory',component: AdminInventoryComponent},
   {path: 'admin/order', component: AdminOrderComponent},
   {path: 'admin/revenue', component: RevenueComponent},
   { path: '**', redirectTo: '' },

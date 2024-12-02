@@ -20,6 +20,9 @@ import { ImageDto } from 'src/app/dto/image.dto';
 import { SizeDto } from 'src/app/dto/size.dto';
 import { SizeService } from 'src/app/services/size/size.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { TokenService } from 'src/app/services/token.service';
+import { InventoryService } from 'src/app/services/inventory/Inventory.service';
+import { ProductSize } from 'src/app/dto/product-size.dto';
 
 @Component({
   selector: 'app-home',
@@ -27,12 +30,14 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  //Loading
-  isLoading = true;
-
-  //Notification
   showNotification: boolean = false;
+  isLoading: boolean = false;
   message: string = '';
+  notification(message: string) {
+    this.showNotification = true;
+    this.message = message;
+    this.timeoutNotification(2000);
+  }
 
   listProduct: ProductDetailDto[] = [];
   images: ImageDto[] = [];
@@ -98,7 +103,8 @@ export class HomeComponent implements OnInit {
     private cartService: ShoppingCartService,
     private imageService: ImageService,
     private sizeService: SizeService, 
-    private dialog :MatDialog
+    private tokenService :TokenService,
+    private inventoryService: InventoryService
   ) {
     debugger
     this.cartService.updateCartStore()
@@ -297,18 +303,56 @@ export class HomeComponent implements OnInit {
   setMessageNotification(message: string) {
     this.message = message;
   }
+  sizesInventory : ProductSize[] = [];
+  
+
+  checkInventory(productId : any){
+  
+    if(this.selectedProduct!=null){
+      this.inventoryService.getStockByProduct(productId).subscribe({
+        next: (response: any) => {
+          this.sizesInventory = response;
+          for(var i = 0;i<this.sizesInventory.length;i++){
+            if(this.sizesInventory[i].size.id == this.selectedSize.id){
+              if(this.sizesInventory[i].quantity == 0){
+                this.notification("Sản phẩm này size "+ this.selectedSize.name + " đã hết hàng");
+                return;
+              }
+            }
+          }
+         
+        },
+        error: (error: any) => {
+          console.log(error);
+          
+        },
+      });
+    }
+  }
 
   async addToCart(product: ProductDetailDto) {
-    // Kiểm tra nếu người dùng chưa chọn size
-    if (!this.selectedSize) {
-      this.showNotification = true;
-      this.setMessageNotification('Vui lòng chọn kích thước cho sản phẩm');
-      this.timeoutNotification(2000);
+    if(!this.tokenService.getToken()){
+      this.notification('Vui lòng đăng nhập để thực hiện mua hàng');
       return;
     }
 
+    if (!this.selectedSize) {
+      this.notification('Vui lòng chọn kích thước cho sản phẩm');
+      return;
+    }
+    
+    this.checkInventory(this.selectedProduct?.id); 
+
+    // Gắn size đã chọn và số lượng vào sản phẩm
+    product.productQuantity = this.productQuantity;
+    product.selectedSize = this.selectedSize
+
+
     const existingItem = await this.cartService.getCartItemById(product.id);
-    if (existingItem != null) {
+    console.log(existingItem.selectedSize)
+    console.log(this.selectedSize)
+      debugger
+    if (existingItem != null && existingItem.selectedSize.id == this.selectedSize.id) {
       this.showNotification = true;
       this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
       this.timeoutNotification(2000);
@@ -316,7 +360,6 @@ export class HomeComponent implements OnInit {
     }
 
     // Gắn size đã chọn và số lượng vào sản phẩm
-    //product.selectedSize = this.selectedSize;
     product.productQuantity = this.productQuantity;
     product.selectedSize = this.selectedSize
 
