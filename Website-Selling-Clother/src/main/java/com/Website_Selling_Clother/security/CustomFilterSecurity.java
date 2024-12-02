@@ -19,8 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @EnableWebSecurity
 public class CustomFilterSecurity {
@@ -72,6 +72,14 @@ public class CustomFilterSecurity {
                             .requestMatchers(GET, String.format("%s/size/**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/banner/**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/product-size/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(GET, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(POST, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(POST, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(PUT, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(PUT, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(DELETE, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
+                            .requestMatchers(DELETE, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
                             .requestMatchers("/ws/**").permitAll()  // Cho phép tất cả các yêu cầu WebSocket không cần xác thực
                             .anyRequest().authenticated();
                 })

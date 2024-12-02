@@ -25,7 +25,6 @@ public class SizeController {
 
     @GetMapping("")
     public ResponseData<List<Size>> getListSize(){
-
         return new ResponseData<>(HttpStatus.OK,"Success",sizeService.findAll());
     }
 

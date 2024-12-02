@@ -90,39 +90,44 @@ export class ShoppingCartService {
   }
 
   // Thêm sản phẩm vào giỏ hàng
-  async addToCart(product: { id: number; [key: string]: any }): Promise<void> {
+  async addToCart(product: { id: number; size?: string; [key: string]: any }): Promise<void> {
     const db = await this.dbPromise;
     const userId = this.tokenService.getToken(); // Lấy userId từ token
-
-    // Tạo khóa duy nhất cho sản phẩm dựa trên userId và productId
-    const uniqueKey = `${userId}-${product.id}`;
-
+  
+    // Đặt kích thước mặc định nếu không có
+    const size = product.size || "default";
+  
+    // Tạo khóa duy nhất cho sản phẩm dựa trên userId, productId và size
+    const uniqueKey = `${userId}-${product.id}-${size}`;
+  
     // Kiểm tra sự tồn tại của sản phẩm trong giỏ hàng
     const existingProduct = await db.get(this.cartStore, uniqueKey);
-
+  
     if (!existingProduct) {
-      // Thêm userId vào sản phẩm
-      const productWithUserId = { ...product, userId }; // Thêm thuộc tính userId
-      await db.put(this.cartStore, { ...productWithUserId, id: uniqueKey }); // Sử dụng uniqueKey làm id
+      // Thêm userId và size vào sản phẩm
+      const productWithMeta = { ...product, userId, size }; // Đảm bảo size được thêm vào
+      await db.put(this.cartStore, { ...productWithMeta, id: uniqueKey }); // Sử dụng uniqueKey làm id
       this.updateCartStatus(); // Cập nhật trạng thái giỏ hàng
-      console.log(this.getCartItems());
+      console.log(await this.getCartItems());
     } else {
       console.warn(
-        `Product with ID ${product.id} already exists in the cart for user ID ${userId}.`,
+        `Product with ID ${product.id} and size ${size} already exists in the cart for user ID ${userId}.`,
       );
     }
   }
+  
 
-  // Lấy sản phẩm chỉ định từ giỏ hàng
-  async getCartItemById(productId: number): Promise<any | undefined> {
+  async getCartItemById(productId: number, size: string = "default"): Promise<any | undefined> {
     const db = await this.dbPromise;
     const userId = this.tokenService.getToken(); // Lấy userId từ token
-    const product = await db.get(this.cartStore, `${userId}-${productId}`); // Sử dụng khóa duy nhất
-
+  
+    // Tìm sản phẩm dựa trên khóa duy nhất (bao gồm size)
+    const product = await db.get(this.cartStore, `${userId}-${productId}-${size}`);
+  
     // Trả về sản phẩm nếu tồn tại
     return product || undefined; // Nếu không tìm thấy
   }
-
+  
   // Xóa sản phẩm khỏi giỏ hàng
   async removeFromCart(productId: number): Promise<void> {
     const db = await this.dbPromise;
