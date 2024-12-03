@@ -19,7 +19,6 @@ import { ImageService } from 'src/app/services/image/image.service';
 import { ImageDto } from 'src/app/dto/image.dto';
 import { SizeDto } from 'src/app/dto/size.dto';
 import { SizeService } from 'src/app/services/size/size.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TokenService } from 'src/app/services/token.service';
 import { InventoryService } from 'src/app/services/inventory/Inventory.service';
 import { ProductSize } from 'src/app/dto/product-size.dto';
@@ -315,7 +314,7 @@ export class HomeComponent implements OnInit {
           for(var i = 0;i<this.sizesInventory.length;i++){
             if(this.sizesInventory[i].size.id == this.selectedSize.id){
               if(this.sizesInventory[i].quantity == 0){
-                this.notification("Sản phẩm này size "+ this.selectedSize.name + " đã hết hàng");
+                this.notification("Sản phẩm này size "+ this.selectedProduct?.selectedSize.name + " đã hết hàng");
                 return;
               }
             }
@@ -331,6 +330,7 @@ export class HomeComponent implements OnInit {
   }
 
   async addToCart(product: ProductDetailDto) {
+    console.log(product);
     if(!this.tokenService.getToken()){
       this.notification('Vui lòng đăng nhập để thực hiện mua hàng');
       return;
@@ -344,15 +344,15 @@ export class HomeComponent implements OnInit {
     this.checkInventory(this.selectedProduct?.id); 
 
     // Gắn size đã chọn và số lượng vào sản phẩm
+    debugger
     product.productQuantity = this.productQuantity;
     product.selectedSize = this.selectedSize
-
-
-    const existingItem = await this.cartService.getCartItemById(product.id);
-    console.log(existingItem.selectedSize)
-    console.log(this.selectedSize)
+    alert(this.selectedSize)
+    debugger
+    const existingItem = await this.cartService.getCartItemById(product.id,this.selectedProduct?.selectedSize.name);
+    
       debugger
-    if (existingItem != null && existingItem.selectedSize.id == this.selectedSize.id) {
+    if (existingItem != null) {
       this.showNotification = true;
       this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
       this.timeoutNotification(2000);
@@ -374,7 +374,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Thêm sản phẩm vào giỏ hàng
-    this.cartService.addToCart(product);
+    this.cartService.addToCart(product, this.selectedProduct?.selectedSize.name); 
     this.showNotification = true;
     this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
     this.timeoutNotification(2000);
@@ -428,7 +428,7 @@ export class HomeComponent implements OnInit {
 
     if (this.selectedProduct) {
       const existingItem = await this.cartService.getCartItemById(
-        this.selectedProduct.id,
+        this.selectedProduct.id,this.selectedProduct?.selectedSize.name
       );
       if (existingItem != null) {
         this.showNotification = true;
@@ -440,7 +440,7 @@ export class HomeComponent implements OnInit {
       this.selectedProduct.selectedSize = this.selectedSize;
       this.selectedProduct.productQuantity = this.productQuantity;
 
-      this.cartService.addToCart(this.selectedProduct);
+      this.cartService.addToCart(this.selectedProduct,this.selectedProduct?.selectedSize.name);
       this.showNotification = true;
       this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
       this.timeoutNotification(2000);

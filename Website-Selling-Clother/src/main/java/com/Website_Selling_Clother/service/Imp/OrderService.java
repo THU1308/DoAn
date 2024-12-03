@@ -67,7 +67,10 @@ public class OrderService implements IOrderService {
             orderDetail.setSubTotal(item.getPrice() * item.getQuantity());
             orderDetail.setOrder(order);
             sum += orderDetail.getSubTotal();
+            productSize.setQuantity(productSize.getQuantity() - item.getQuantity());
+            productSizeRepository.save(productSize);
             orderDetailRepository.save(orderDetail);
+
         }
         order.setTotalPrice(sum);
         order.setUser(user);
