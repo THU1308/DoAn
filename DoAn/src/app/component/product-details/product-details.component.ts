@@ -159,6 +159,7 @@ export class ProductDetailsComponent implements OnInit {
 
   async addToCart(product: ProductDetailDto) {
     // Kiểm tra nếu người dùng chưa chọn size
+    alert(this.selectedSize.name)
     if (!this.selectedSize) {
       this.showNotification = true;
       this.setMessageNotification('Vui lòng chọn kích thước cho sản phẩm');
@@ -166,7 +167,7 @@ export class ProductDetailsComponent implements OnInit {
       return;
     }
 
-    const existingItem = await this.cartService.getCartItemById(product.id);
+    const existingItem = await this.cartService.getCartItemById(product.id,this.selectedSize.name);
     if (existingItem != null) {
       this.showNotification = true;
       this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
@@ -192,7 +193,7 @@ export class ProductDetailsComponent implements OnInit {
     //console.log('Sản phẩm với ảnh:', product);
 
     // Thêm sản phẩm vào giỏ hàng
-    this.cartService.addToCart(product);
+    this.cartService.addToCart(product,this.selectedSize.name);
     this.showNotification = true;
     this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
     this.timeoutNotification(2000);
