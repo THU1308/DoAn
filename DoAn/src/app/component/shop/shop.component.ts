@@ -309,7 +309,7 @@ export class ShopComponent implements OnInit {
 
     if (this.selectedProduct) {
       const existingItem = await this.cartService.getCartItemById(
-        this.selectedProduct.id,
+        this.selectedProduct.id,this.selectedSize.name
       );
       if (existingItem != null) {
         this.showNotification = true;
@@ -322,7 +322,7 @@ export class ShopComponent implements OnInit {
       this.selectedProduct.productQuantity = this.productQuantity;
 
       debugger
-      this.cartService.addToCart(this.selectedProduct);
+      this.cartService.addToCart(this.selectedProduct,this.selectedProduct?.selectedSize.name);
       this.showNotification = true;
       this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
       this.timeoutNotification(2000);
