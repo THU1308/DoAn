@@ -36,15 +36,17 @@ export class ShoppingCartService {
     this.dbPromise = openDB('ShoppingCartDB', 1, {
       upgrade: (db) => {
         debugger;
+        const token = this.tokenService.getToken();
+        if (token!=null && !db.objectStoreNames.contains(`shopping_cart_user`)) {
+          db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
+        }
+
         console.log(db.objectStoreNames);
         if (!db.objectStoreNames.contains('shopping_cart_guest')) {
           db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
         }
         // Tạo store cho người dùng nếu cần
-        const token = this.tokenService.getToken();
-        if (token && !db.objectStoreNames.contains(`shopping_cart_user`)) {
-          db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
-        }
+        
       },
     });
     await this.updateCartStore();
