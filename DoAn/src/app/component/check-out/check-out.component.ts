@@ -155,7 +155,7 @@ export class CheckOutComponent {
       paymentStatus: this.selectedPaymentMethod,
       username : this.currentUserNameLogin
     };
-
+   
     // Cập nhật chi tiết đơn hàng
     this.order.orderDetailDTOS = this.cartItems.map((item) => ({
       productId: item.productId,
@@ -164,7 +164,7 @@ export class CheckOutComponent {
       subTotal: item.productPrice * item.productQuantity,
       sizeId: item.productSize ? item.productSize.id : null,
     }));
-
+    alert(JSON.stringify(this.order))
     // Gửi yêu cầu tạo đơn hàng
     this.orderService.addOrder(this.order).subscribe({
       next: (response: any) => {

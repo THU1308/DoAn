@@ -40,6 +40,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AdminOrderComponent } from './admin-order/admin-order.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { BaseChartDirective } from 'ng2-charts';
+import { AdminChatComponent } from './admin-chat/admin-chat.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { BaseChartDirective } from 'ng2-charts';
     AdminInventoryComponent,
     AdminOrderComponent,
     RevenueComponent,
-    PreloaderComponent
+    PreloaderComponent,
+    AdminChatComponent
   ],
   imports: [
     BrowserModule,
