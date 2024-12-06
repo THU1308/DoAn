@@ -22,6 +22,7 @@ import { SizeService } from 'src/app/services/size/size.service';
 import { TokenService } from 'src/app/services/token.service';
 import { InventoryService } from 'src/app/services/inventory/Inventory.service';
 import { ProductSize } from 'src/app/dto/product-size.dto';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-home',
@@ -103,7 +104,8 @@ export class HomeComponent implements OnInit {
     private imageService: ImageService,
     private sizeService: SizeService, 
     private tokenService :TokenService,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    private webSocketService : WebSocketService
   ) {
     debugger
     this.cartService.updateCartStore()
@@ -122,6 +124,7 @@ export class HomeComponent implements OnInit {
         }
       }),
     );
+   
   }
 
   ngOnInit(): void {

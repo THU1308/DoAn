@@ -1,7 +1,45 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Size - Web Bán Hàng Thời Trang</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/admin/category">Dashboard</a></li>
+      <li><a href="/admin/products">Sản phẩm</a></li>
+      <li><a href="/admin/orders">Đơn hàng</a></li>
+      <li><a href="/admin/customers">Khách hàng</a></li>
+      <li><a href="/admin/reports">Thống kê</a></li>
+      <li><a href="/logout">Đăng xuất</a></li>
+    </ul>
+  </nav>
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="logo">Admin - Web Thời Trang</div>
+      <div class="user-info">
+        <span>Chào, Admin</span>
+        <span><a href="/logout">Đăng xuất</a></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
     <div class="row clearfix">
       <div class="col-lg-12">
-        <div class="card chat-app">
+        <div class="card chat-app" style="margin-left:100px ;width: 95%;">
           <div id="plist" class="people-list">
             <div class="input-group">
               <div class="input-group-prepend">
@@ -10,20 +48,14 @@
               <input type="text" class="form-control" placeholder="Search...">
             </div>
             <ul class="list-unstyled chat-list mt-2 mb-0">
-              <li
-                class="clearfix"
-                *ngFor="let user of (users | keyvalue)"
-                [ngClass]="{ active: user.key === currentUser }"
-                (click)="switchChat(user.key)"
-              >
-                <img
-                  src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                  alt="avatar"
-                />
+              <li class="clearfix" *ngFor="let user of (users | keyvalue)"
+                [ngClass]="{ active: user.key === currentUser }" (click)="switchChat(user.key)">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                 <div class="about">
                   <div class="name">{{ user.key }}</div>
                   <div class="status">
-                    <i class="fa fa-circle" [ngClass]="{'online': user.value.count > 0, 'offline': user.value.count === 0 }"></i>
+                    <i class="fa fa-circle"
+                      [ngClass]="{'online': user.value.count > 0, 'offline': user.value.count === 0 }"></i>
                     {{ user.value.count > 0 ? 'online' : 'offline' }}
                   </div>
                 </div>
@@ -42,17 +74,11 @@
             </div>
             <div class="chat-history">
               <ul class="m-b-0">
-                <li
-                  class="clearfix"
-                  *ngFor="let msg of users[currentUser]?.messages"
-                >
-                  <div
-                    class="message"
-                    [ngClass]="{
-                      'my-message': msg.sender === 'admin',
-                      'other-message float-right': msg.sender !== 'admin'
-                    }"
-                  >
+                <li class="clearfix" *ngFor="let msg of users[currentUser]?.messages">
+                  <div class="message" [ngClass]="{
+                                'my-message': msg.sender === 'admin',
+                                'other-message float-right': msg.sender !== 'admin'
+                              }">
                     {{ msg.content }}
                   </div>
                 </li>
@@ -65,13 +91,8 @@
                     <i class="fa fa-send"></i>
                   </span>
                 </div>
-                <input
-                  [(ngModel)]="message"
-                  (keyup.enter)="sendMessage()"
-                  type="text"
-                  class="form-control"
-                  placeholder="Nhập tin nhắn..."
-                />
+                <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" class="form-control"
+                  placeholder="Nhập tin nhắn..." />
               </div>
             </div>
           </div>
@@ -79,4 +100,8 @@
       </div>
     </div>
   </div>
-  
+
+
+</body>
+
+</html>

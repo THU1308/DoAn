@@ -1,11 +1,29 @@
-<div class="chat-container">
-  <div class="messages">
-    <div *ngFor="let msg of messages" class="message" [ngClass]="{'sent': msg.sender === 'admin', 'received': msg.sender !== 'admin'}">
-      {{ msg.content }}
-    </div>
+<div class="chat-wrapper">
+  <div class="chat-icon" (click)="toggleChat()">
+    <i class="fa fa-envelope"></i>
   </div>
-  <div class="input-container">
-    <input [(ngModel)]="message" (keyup.enter)="sendMessage()" placeholder="Nhập tin nhắn..." />
-    <button (click)="sendMessage()">Gửi</button>
+</div>
+
+
+<div class="chat-container" *ngIf="isChatOpen">
+  <div class="wrapper">
+    <div class="title">Simple Chatbot</div>
+    <div class="box">
+      <div class="item" *ngFor="let msg of messages" [ngClass]="{'right': msg.sender === currentUser, 'left': msg.sender !== currentUser}">
+        <div class="icon" >
+          <i class="fa fa-user"></i>
+        </div>
+        <div class="msg">
+          <p>{{ msg.content }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="typing-area">
+      <div class="input-field">
+        <input [(ngModel)]="message" (keyup.enter)="sendMessage()" placeholder="Type your message" required />
+        <button (click)="sendMessage()">Send</button>
+      </div>
+    </div>
   </div>
 </div>
