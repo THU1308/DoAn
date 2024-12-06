@@ -14,7 +14,11 @@ export class ChatComponent {
   messages: ChatMessage[] = [];
   currentUser: string = '';
 
-  constructor(private webSocketService: WebSocketService, private tokenService: TokenService, private userService:UserService) {}
+  constructor(
+    private webSocketService: WebSocketService,
+    private tokenService: TokenService,
+    private userService: UserService
+  ) {}
   getCurrentUser() {
     this.userService.getCurrenUserLogin().subscribe({
       next: (res: any) => {
@@ -27,13 +31,33 @@ export class ChatComponent {
     // Đăng ký nhận phản hồi từ admin
     this.getCurrentUser();
 
-    this.webSocketService.getPrivateMessages().subscribe((message) => {
-      debugger
-      const msg: ChatMessage = JSON.parse(message);
-      if (msg.sender === 'admin') {
-        this.messages.push(msg);
-      }
-    });
+    this.webSocketService
+      .getPrivateMessages()
+      .subscribe((messages: string[]) => {
+        debugger;
+        // Kiểm tra xem mảng có ít nhất một phần tử hay không
+        if (messages.length > 0) {
+          // Lấy phần tử cuối cùng trong mảng messages
+          const lastMessage = messages[messages.length - 1];
+          let msg: ChatMessage;
+
+          try {
+            msg = JSON.parse(lastMessage); // Phân tích chuỗi JSON
+          } catch (error) {
+            console.error('Error parsing message:', error);
+            return; // Dừng thực hiện nếu không thể phân tích
+          }
+
+          const userId = msg.sender; // Giả sử sender là ID người dùng
+
+          if (userId == 'admin') {
+            this.messages.push(msg);
+          }
+          // Nếu admin đang trò chuyện với user khác, có thể thực hiện một hành động khác nếu cần
+          if (this.currentUser !== userId) {
+          }
+        }
+      });
   }
 
   sendMessage() {
@@ -45,8 +69,27 @@ export class ChatComponent {
       };
       this.webSocketService.sendMessage(chatMessage);
       this.message = '';
-      // Thêm tin nhắn của chính user vào giao diện
+      // Thêm tin nhắn của chính user vào giao diện 
       this.messages.push(chatMessage);
     }
   }
+
+  isChatOpen: boolean = false; // Trạng thái mở hộp chat
+  toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+    const chatBox = document.querySelector('.chat-container') as HTMLElement;
+    const wrapper = document.querySelector('.wrapper') as HTMLElement;
+  
+    if (chatBox && wrapper) {
+      if (this.isChatOpen) {
+        chatBox.classList.add('active');
+        wrapper.classList.add('active');
+      } else {
+        chatBox.classList.remove('active');
+        wrapper.classList.remove('active');
+      }
+    }
+  }
+  
+
 }
