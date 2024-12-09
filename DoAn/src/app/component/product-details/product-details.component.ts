@@ -10,6 +10,8 @@ import { SizeService } from 'src/app/services/size/size.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ProductDto } from 'src/app/dto/product.dto';
 import { ShoppingCartService } from 'src/app/services/cart/cart.service';
+import { InventoryService } from 'src/app/services/inventory/Inventory.service';
+import { ProductSize } from 'src/app/dto/product-size.dto';
 
 @Component({
   selector: 'app-product-details',
@@ -22,7 +24,14 @@ export class ProductDetailsComponent implements OnInit {
   images: ImageDto[] = [];
   sizes: SizeDto[] = [];
   selectedSize: any;
-  isLoading = true;
+  showNotification: boolean = false;
+  isLoading: boolean = false;
+  message: string = '';
+  notification(message: string) {
+    this.showNotification = true;
+    this.message = message;
+    this.timeoutNotification(2000);
+  }
 
   constructor(
     private productService: ProductService,
@@ -31,7 +40,8 @@ export class ProductDetailsComponent implements OnInit {
     private sizeService: SizeService,
     private catergoryService: CategoryService,
     private cartService: ShoppingCartService,
-  ) {}
+    private inventoryService: InventoryService
+  ) { }
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -68,11 +78,11 @@ export class ProductDetailsComponent implements OnInit {
         .subscribe({
           next: (response: any) => {
             //debugger;
-              if(!Array.isArray(productDetailDto.images)){
-                productDetailDto.images = [];
-              }
-              productDetailDto.images = response.data;
-              //console.log(productDetailDto.images.length)
+            if (!Array.isArray(productDetailDto.images)) {
+              productDetailDto.images = [];
+            }
+            productDetailDto.images = response.data;
+            //console.log(productDetailDto.images.length)
             resolve(); // Hoàn thành Promise khi ảnh được gán
           },
           error: (error: any) => {
@@ -88,9 +98,9 @@ export class ProductDetailsComponent implements OnInit {
       next: (response: any) => {
         //debugger;
         //this.sizes = response.data;
-        if(this.product!=null){
-          if(!Array.isArray(this.product.productSize)){
-            this.product.productSize=[];
+        if (this.product != null) {
+          if (!Array.isArray(this.product.productSize)) {
+            this.product.productSize = [];
           }
           this.product.productSize = response.data;
           console.log("sizesdad: " + this.product.productSize[0].name)
@@ -116,9 +126,6 @@ export class ProductDetailsComponent implements OnInit {
   setActiveImage(index: number): void {
     this.activeImageIndex = index;
   }
-
-  showNotification: boolean = false;
-  message: string = '';
 
   //Cart
   timeoutNotification(milisecon: number) {
@@ -157,9 +164,38 @@ export class ProductDetailsComponent implements OnInit {
   //   );
   // }
 
+  sizesInventory: ProductSize[] = [];
+  async checkInventory(product: ProductDetailDto): Promise<boolean> {
+    if (product != null) {
+      try {
+        const response: any = await this.inventoryService.getStockByProduct(product.id).toPromise();
+        this.sizesInventory = response;
+        debugger
+        for (let i = 0; i < this.sizesInventory.length; i++) {
+          if (this.sizesInventory[i].size.id == this.selectedSize.id) {
+            if (this.sizesInventory[i].quantity == 0) {
+              this.notification("Sản phẩm này size " + product?.selectedSize.name + " đã hết hàng");
+              return false;
+            }
+
+            if (this.sizesInventory[i].quantity < this.productQuantity) {
+              this.notification("Sản phẩm này size " + this.product?.selectedSize.name + " không đủ số lượng. Số lượng tồn: " + this.sizesInventory[i].quantity);
+              return false;
+            }
+          }
+        }
+
+        return true;
+      } catch (error) {
+        console.log("Error checking inventory:", error);
+        return false;
+      }
+    }
+    return true;
+  }
+
   async addToCart(product: ProductDetailDto) {
     // Kiểm tra nếu người dùng chưa chọn size
-    alert(this.selectedSize.name)
     if (!this.selectedSize) {
       this.showNotification = true;
       this.setMessageNotification('Vui lòng chọn kích thước cho sản phẩm');
@@ -167,7 +203,7 @@ export class ProductDetailsComponent implements OnInit {
       return;
     }
 
-    const existingItem = await this.cartService.getCartItemById(product.id,this.selectedSize.name);
+    const existingItem = await this.cartService.getCartItemById(product.id, this.selectedSize.name);
     if (existingItem != null) {
       this.showNotification = true;
       this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
@@ -180,6 +216,7 @@ export class ProductDetailsComponent implements OnInit {
     product.productQuantity = this.productQuantity;
 
 
+
     // Kiểm tra xem images có phải là mảng không và khởi tạo nếu cần
     if (!Array.isArray(product.images)) {
       product.images = [];
@@ -190,10 +227,13 @@ export class ProductDetailsComponent implements OnInit {
       product.images[0] = this.images[0];
     }
 
-    //console.log('Sản phẩm với ảnh:', product);
+    const isAvailable = await this.checkInventory(product);
+    if (!isAvailable) {
+      return;
+    }
 
     // Thêm sản phẩm vào giỏ hàng
-    this.cartService.addToCart(product,this.selectedSize.name);
+    this.cartService.addToCart(product, this.selectedSize.name);
     this.showNotification = true;
     this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
     this.timeoutNotification(2000);
