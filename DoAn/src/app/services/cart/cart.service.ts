@@ -39,12 +39,13 @@ export class ShoppingCartService {
         const token = this.tokenService.getToken();
         if (token!=null && !db.objectStoreNames.contains(`shopping_cart_user`)) {
           db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
-        }
-
-        console.log(db.objectStoreNames);
-        if (!db.objectStoreNames.contains('shopping_cart_guest')) {
           db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
         }
+
+        // console.log(db.objectStoreNames);
+        // if (!db.objectStoreNames.contains('shopping_cart_guest')) {
+        //   db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
+        // }
         // Tạo store cho người dùng nếu cần
         
       },

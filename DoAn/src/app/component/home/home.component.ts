@@ -350,7 +350,6 @@ export class HomeComponent implements OnInit {
     debugger
     product.productQuantity = this.productQuantity;
     product.selectedSize = this.selectedSize
-    alert(this.selectedSize)
     debugger
     const existingItem = await this.cartService.getCartItemById(product.id,this.selectedProduct?.selectedSize.name);
     
