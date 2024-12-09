@@ -67,15 +67,15 @@ export class HomeComponent implements OnInit {
   productQuantity: number = 1;
   isModalOpen: boolean = false; // Trạng thái modal
 
-    // Hàm mở modal
-    openModal(product: ProductDetailDto): void {
-      this.selectedProduct = product;
-      this.selectedSize = null;
-      //this.selectedColor = null;
-      this.getSize(product);
-      this.productQuantity = 1;
+  // Hàm mở modal
+  openModal(product: ProductDetailDto): void {
+    this.selectedProduct = product;
+    this.selectedSize = null;
+    //this.selectedColor = null;
+    this.getSize(product);
+    this.productQuantity = 1;
 
-      this.isModalOpen = true
+    this.isModalOpen = true
   }
 
   // Hàm đóng modal
@@ -102,10 +102,9 @@ export class HomeComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private cartService: ShoppingCartService,
     private imageService: ImageService,
-    private sizeService: SizeService, 
-    private tokenService :TokenService,
-    private inventoryService: InventoryService,
-    private webSocketService : WebSocketService
+    private sizeService: SizeService,
+    private tokenService: TokenService,
+    private inventoryService: InventoryService
   ) {
     debugger
     this.cartService.updateCartStore()
@@ -124,7 +123,7 @@ export class HomeComponent implements OnInit {
         }
       }),
     );
-   
+
   }
 
   ngOnInit(): void {
@@ -157,7 +156,7 @@ export class HomeComponent implements OnInit {
             }
             await this.getImages(product);
             await this.getSize(product);
-            
+
           }),
         );
       }
@@ -178,7 +177,7 @@ export class HomeComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.imageService.getListImgById(productDetailDto.imageIds[0]).subscribe({
         next: (response: any) => {
-          
+
           if (response && Array.isArray(response)) {
             debugger
             productDetailDto.images = response;
@@ -305,36 +304,42 @@ export class HomeComponent implements OnInit {
   setMessageNotification(message: string) {
     this.message = message;
   }
-  sizesInventory : ProductSize[] = [];
-  
+  sizesInventory: ProductSize[] = [];
 
-  checkInventory(productId : any){
-  
-    if(this.selectedProduct!=null){
-      this.inventoryService.getStockByProduct(productId).subscribe({
-        next: (response: any) => {
-          this.sizesInventory = response;
-          for(var i = 0;i<this.sizesInventory.length;i++){
-            if(this.sizesInventory[i].size.id == this.selectedSize.id){
-              if(this.sizesInventory[i].quantity == 0){
-                this.notification("Sản phẩm này size "+ this.selectedProduct?.selectedSize.name + " đã hết hàng");
-                return;
-              }
+
+  async checkInventory(productId: any): Promise<boolean> {
+    if (this.selectedProduct != null) {
+      try {
+        const response: any = await this.inventoryService.getStockByProduct(productId).toPromise();
+        this.sizesInventory = response;
+        debugger
+        for (let i = 0; i < this.sizesInventory.length; i++) {
+          if (this.sizesInventory[i].size.id == this.selectedSize.id) {
+            if (this.sizesInventory[i].quantity == 0) {
+              this.notification("Sản phẩm này size " + this.selectedProduct?.selectedSize.name + " đã hết hàng");
+              return false;
+            }
+
+            if (this.sizesInventory[i].quantity < this.productQuantity) {
+              this.notification("Sản phẩm này size " + this.selectedProduct?.selectedSize.name + " không đủ số lượng. Số lượng tồn: " + this.sizesInventory[i].quantity);
+              return false;
             }
           }
-         
-        },
-        error: (error: any) => {
-          console.log(error);
-          
-        },
-      });
+        }
+
+        return true;
+      } catch (error) {
+        console.log("Error checking inventory:", error);
+        return false;
+      }
     }
+    return true;
   }
+
 
   async addToCart(product: ProductDetailDto) {
     console.log(product);
-    if(!this.tokenService.getToken()){
+    if (!this.tokenService.getToken()) {
       this.notification('Vui lòng đăng nhập để thực hiện mua hàng');
       return;
     }
@@ -343,17 +348,16 @@ export class HomeComponent implements OnInit {
       this.notification('Vui lòng chọn kích thước cho sản phẩm');
       return;
     }
-    
-    this.checkInventory(this.selectedProduct?.id); 
 
-    // Gắn size đã chọn và số lượng vào sản phẩm
-    debugger
     product.productQuantity = this.productQuantity;
     product.selectedSize = this.selectedSize
-    debugger
-    const existingItem = await this.cartService.getCartItemById(product.id,this.selectedProduct?.selectedSize.name);
-    
-      debugger
+
+    const isAvailable = await this.checkInventory(this.selectedProduct?.id);
+    if (!isAvailable) {
+      return;
+    }
+    const existingItem = await this.cartService.getCartItemById(product.id, this.selectedProduct?.selectedSize.name);
+
     if (existingItem != null) {
       this.showNotification = true;
       this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
@@ -376,7 +380,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Thêm sản phẩm vào giỏ hàng
-    this.cartService.addToCart(product, this.selectedProduct?.selectedSize.name); 
+    this.cartService.addToCart(product, this.selectedProduct?.selectedSize.name);
     this.showNotification = true;
     this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
     this.timeoutNotification(2000);
@@ -395,9 +399,9 @@ export class HomeComponent implements OnInit {
     this.sizeService.getSizeOfProduct(product.id).subscribe({
       next: (response: any) => {
         //this.sizes = response.data;
-        if(product!=null){
-          if(!Array.isArray(product.productSize)){
-            product.productSize=[];
+        if (product != null) {
+          if (!Array.isArray(product.productSize)) {
+            product.productSize = [];
           }
           product.productSize = response.data;
           console.log("sizesdad: " + product.productSize[0].name)
@@ -420,35 +424,6 @@ export class HomeComponent implements OnInit {
   }
 
   // Function to add the product to the cart
-  async addProductToCart() {
-    if (!this.selectedSize) {
-      this.showNotification = true;
-      this.setMessageNotification('Vui lòng chọn kích thước cho sản phẩm');
-      this.timeoutNotification(2000);
-      return;
-    }
-
-    if (this.selectedProduct) {
-      const existingItem = await this.cartService.getCartItemById(
-        this.selectedProduct.id,this.selectedProduct?.selectedSize.name
-      );
-      if (existingItem != null) {
-        this.showNotification = true;
-        this.setMessageNotification('Sản phẩm đã có trong giỏ hàng');
-        this.timeoutNotification(2000);
-        return;
-      }
-
-      this.selectedProduct.selectedSize = this.selectedSize;
-      this.selectedProduct.productQuantity = this.productQuantity;
-
-      this.cartService.addToCart(this.selectedProduct,this.selectedProduct?.selectedSize.name);
-      this.showNotification = true;
-      this.setMessageNotification('Thêm sản phẩm vào giỏ hàng thành công');
-      this.timeoutNotification(2000);
-      //this.closeProductDetailsModel();
-    }
-  }
 
   updateDisplayedProducts() {
     this.totalPages = Math.ceil(this.listProduct.length / this.productsPerPage);

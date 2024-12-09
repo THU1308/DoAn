@@ -37,7 +37,7 @@ export class ShoppingCartService {
       upgrade: (db) => {
         debugger;
         const token = this.tokenService.getToken();
-        if (token!=null && !db.objectStoreNames.contains(`shopping_cart_user`)) {
+        if (token!=null && !db.objectStoreNames.contains(`shopping_cart_user`)|| token!=null && !db.objectStoreNames.contains(`shopping_cart_guest`)) {
           db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
           db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
         }
