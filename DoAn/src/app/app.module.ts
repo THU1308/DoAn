@@ -41,6 +41,7 @@ import { AdminOrderComponent } from './admin-order/admin-order.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { AdminChatComponent } from './admin-chat/admin-chat.component';
+import { AdminSlidebarComponent } from './admin-slidebar/admin-slidebar.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { AdminChatComponent } from './admin-chat/admin-chat.component';
     AdminOrderComponent,
     RevenueComponent,
     PreloaderComponent,
-    AdminChatComponent
+    AdminChatComponent,
+    AdminSlidebarComponent
   ],
   imports: [
     BrowserModule,
