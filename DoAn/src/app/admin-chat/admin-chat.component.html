@@ -25,6 +25,8 @@
     </div>
 
   </div>
+  <app-notification [showNotification]="showNotification" [message]="messageNotification"
+  (closeNotification)="showNotification"></app-notification>
 
   <!-- Main Content -->
   <div class="container">
@@ -67,8 +69,8 @@
               <ul class="m-b-0">
                 <li class="clearfix" *ngFor="let msg of users[currentUser]?.messages">
                   <div class="message" [ngClass]="{
-                                'my-message': msg.sender === 'admin',
-                                'other-message float-right': msg.sender !== 'admin'
+                                'my-message float-right': msg.sender === 'admin',
+                                'other-message ': msg.sender !== 'admin'
                               }">
                     {{ msg.content }}
                   </div>
