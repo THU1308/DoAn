@@ -28,7 +28,6 @@ public class ChatController {
     @MessageMapping("/chat.replyMessage")
     public void replyMessage(@Payload ChatMessage chatMessage) {
         String userId = chatMessage.getReceiver();
-        String txt = "/user/" + userId + "/queue/private";
         messagingTemplate.convertAndSend("/user/" + userId + "/queue/private", chatMessage);
     }
 }
