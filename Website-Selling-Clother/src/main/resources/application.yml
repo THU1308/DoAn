@@ -1,6 +1,9 @@
 server:
   port: 8088
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     url: jdbc:mysql://localhost:3306/shopclothes_db
     driver-class-name: com.mysql.cj.jdbc.Driver

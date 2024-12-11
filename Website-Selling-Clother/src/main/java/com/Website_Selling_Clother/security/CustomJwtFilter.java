@@ -92,7 +92,8 @@ public class CustomJwtFilter extends OncePerRequestFilter {
                 Pair.of(String.format("%s/size", apiPrefix), "GET"),
                 Pair.of(String.format("%s/banner", apiPrefix), "GET"),
                 // Bypass xác thực cho WebSocket
-                Pair.of("/ws", "GET")
+                Pair.of("/ws", "GET"),
+                Pair.of("/chat", "GET")
         );
 
         for (Pair<String, String> bypassToken : bypassTokens) {

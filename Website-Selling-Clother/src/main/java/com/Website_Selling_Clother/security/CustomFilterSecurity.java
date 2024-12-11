@@ -72,6 +72,7 @@ public class CustomFilterSecurity {
                             .requestMatchers(GET, String.format("%s/size/**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/banner/**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/product-size/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET, String.format("%s/chat/**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
                             .requestMatchers(GET, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
                             .requestMatchers(POST, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
@@ -80,7 +81,8 @@ public class CustomFilterSecurity {
                             .requestMatchers(PUT, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
                             .requestMatchers(DELETE, String.format("%s/admin/**", apiPrefix)).fullyAuthenticated()
                             .requestMatchers(DELETE, String.format("%s/dashboard/**", apiPrefix)).fullyAuthenticated()
-                            .requestMatchers("/ws/**").permitAll()  // Cho phép tất cả các yêu cầu WebSocket không cần xác thực
+                            .requestMatchers("/ws/**").permitAll()// Cho phép tất cả các yêu cầu WebSocket không cần xác thực
+                            .requestMatchers("/chat/**").permitAll()// Cho phép tất cả các yêu cầu WebSocket không cần xác thực
                             .anyRequest().authenticated();
                 })
                 // Thêm xử lý cho lỗi Unauthorized và Access Denied
