@@ -207,6 +207,23 @@ body {
   animation: fadeIn 0.5s ease;
 }
 
+.message-time.my-message-time {
+    font-size: 0.7rem;
+    color: #888;
+   white-space: nowrap;
+    text-align: start;
+    margin-left: 16px;
+    
+}
+
+.message-time{
+    font-size: 0.7rem;
+    color: #888;
+   white-space: nowrap;
+    text-align: end;
+    margin-right: 16px;
+}
+
 /* Animation for label */
 @keyframes fadeIn {
   from {

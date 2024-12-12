@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { WebSocketService } from '../services/web-socket/web-socket.service';
 import { TokenService } from '../services/token.service';
 import { ChatMessage } from '../dto/mesage.dto';
@@ -18,7 +18,7 @@ export class ChatComponent {
     private webSocketService: WebSocketService,
     private tokenService: TokenService,
     private userService: UserService
-  ) {}
+  ) { }
   getCurrentUser() {
     this.userService.getCurrenUserLogin().subscribe({
       next: (res: any) => {
@@ -66,7 +66,7 @@ export class ChatComponent {
         content: this.message,
         sender: this.currentUser,
         receiver: 'admin',
-        timeStamp: '',
+        timeStamp: new Date().toISOString(),
       };
       this.webSocketService.sendMessage(chatMessage);
       this.message = '';
@@ -77,10 +77,11 @@ export class ChatComponent {
 
   isChatOpen: boolean = false; // Trạng thái mở hộp chat
   toggleChat() {
+    this.loadUserChatHistory(this.currentUser)
     this.isChatOpen = !this.isChatOpen;
     const chatBox = document.querySelector('.chat-container') as HTMLElement;
     const wrapper = document.querySelector('.wrapper') as HTMLElement;
-  
+
     if (chatBox && wrapper) {
       if (this.isChatOpen) {
         chatBox.classList.add('active');
@@ -91,6 +92,22 @@ export class ChatComponent {
       }
     }
   }
-  
+
+  loadUserChatHistory(userId: string) {
+    this.webSocketService.getChatHistory(userId).subscribe((messages) => {
+      debugger
+      this.messages = messages;
+
+    });
+  }
+  @ViewChild('chatBox') private chatBox!: ElementRef;
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+  scrollToBottom(): void {
+    try {
+      this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
 
 }

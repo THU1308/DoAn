@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ChatMessage } from '../dto/mesage.dto';
 import { WebSocketService } from '../services/web-socket/web-socket.service';
 @Component({
@@ -98,10 +98,13 @@ export class AdminChatComponent {
     });
   }
 
-  // loadAdminChatHistory(userId: string) {
-  //   this.webSocketService.getChatHistory(userId).subscribe((messages) => {
-  //     debugger
-  //     this.adminMessages = messages;
-  //   });
-  // }
+  @ViewChild('chatBox') private chatBox!: ElementRef;
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+  scrollToBottom(): void {
+    try {
+      this.chatBox.nativeElement.scrollTop = this.chatBox.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
 }

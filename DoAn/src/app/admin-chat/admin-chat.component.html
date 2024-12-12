@@ -67,7 +67,7 @@
                 </div>
               </div>
             </div>
-            <div class="chat-history">
+            <div class="chat-history" #chatBox>
               <ul class="m-b-0">
                 <li class="clearfix" *ngFor="let msg of users[currentUser]?.messages">
                    <div class="message-container" [ngClass]="{'my-message-container': msg.sender === 'admin', 'other-message-container': msg.sender !== 'admin' }">
