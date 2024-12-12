@@ -42,7 +42,7 @@
             </div>
             <ul class="list-unstyled chat-list mt-2 mb-0">
               <li class="clearfix" *ngFor="let user of (users | keyvalue)"
-                [ngClass]="{ active: user.key === currentUser }" (click)="switchChat(user.key)">
+                  [ngClass]="{ active: user.key === currentUser }" (click)="switchChat(user.key)">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                 <div class="about">
                   <div class="name">{{ user.key }}
@@ -70,12 +70,20 @@
             <div class="chat-history">
               <ul class="m-b-0">
                 <li class="clearfix" *ngFor="let msg of users[currentUser]?.messages">
-                  <div class="message" [ngClass]="{
-                                'my-message float-right': msg.sender === 'admin',
-                                'other-message ': msg.sender !== 'admin'
-                              }">
-                    {{ msg.content }}
-                  </div>
+                   <div class="message-container" [ngClass]="{'my-message-container': msg.sender === 'admin', 'other-message-container': msg.sender !== 'admin' }">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="message-avatar">
+                          <div class="message-content-time-container">
+                               <div class="message" [ngClass]="{
+                                          'my-message': msg.sender === 'admin',
+                                          'other-message ': msg.sender !== 'admin'
+                                        }">
+                                    {{ msg.content }}
+                              </div>
+                              <div class="message-time" [ngClass]="{'my-message-time': msg.sender === 'admin'}">
+                                {{ msg.timeStamp | date:'shortTime' }}
+                              </div>
+                           </div>
+                     </div>
                 </li>
               </ul>
             </div>

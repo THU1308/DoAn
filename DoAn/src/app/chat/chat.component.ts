@@ -66,6 +66,7 @@ export class ChatComponent {
         content: this.message,
         sender: this.currentUser,
         receiver: 'admin',
+        timeStamp: '',
       };
       this.webSocketService.sendMessage(chatMessage);
       this.message = '';

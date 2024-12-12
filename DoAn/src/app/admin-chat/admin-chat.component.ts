@@ -73,6 +73,7 @@ export class AdminChatComponent {
         content: this.message,
         sender: 'admin',
         receiver: this.currentUser,
+        timeStamp: new Date().toISOString(),
       };
       this.webSocketService.sendReply(chatMessage);
       if (this.currentUser && this.users[this.currentUser]) {
