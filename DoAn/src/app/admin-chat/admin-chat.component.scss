@@ -231,54 +231,55 @@ body {
 
 .chat .chat-history .message {
     color: #444;
-    padding: 18px 20px;
-    line-height: 26px;
-    font-size: 16px;
-    border-radius: 7px;
+    padding: 10px 14px;
+    line-height: 20px;
+    font-size: 14px;
+    border-radius: 18px;
     display: inline-block;
-    position: relative
+    position: relative;
+    word-wrap: break-word;
+}
+/* time */
+.message-container {
+    display: flex;
+    flex-direction: column; /* Messages are now top down */
+    align-items: flex-start; /* Align content to the start */
+    margin-bottom: 15px;
+}
+/* Avatar */
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 5px; /* Add spacing below the avatar */
+}
+.my-message-container {
+    align-items: flex-start;
+}
+.other-message-container {
+    align-items: flex-end;
 }
 
 .chat .chat-history .message:after {
-    bottom: 100%;
-    left: 7%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-bottom-color: #fff;
-    border-width: 10px;
-    margin-left: -10px
+  display: none; /* remove the tail */
 }
-
 .chat .chat-history .my-message {
-    background: #efefef
+    background: #efefef;
+    max-width: 500px;
 }
 
 .chat .chat-history .my-message:after {
-    bottom: 100%;
-    left: 30px;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-bottom-color: #efefef;
-    border-width: 10px;
-    margin-left: -10px
+   display: none; /* remove the tail */
 }
 
 .chat .chat-history .other-message {
     background: #e8f1f3;
-    text-align: right
+    text-align: left;
+    max-width: 500px;
 }
 
 .chat .chat-history .other-message:after {
-    border-bottom-color: #e8f1f3;
-    left: 93%
+    display: none; /* remove the tail */
 }
 
 .chat .chat-message {
@@ -326,6 +327,28 @@ body {
     font-size: 0.8em;
     margin-left: 5px;
 }
+/*Time */
+
+.message-time.my-message-time {
+    font-size: 0.7rem;
+    color: #888;
+   white-space: nowrap;
+    text-align: start;
+}
+
+.message-time{
+    font-size: 0.7rem;
+    color: #888;
+   white-space: nowrap;
+    text-align: end;
+}
+
+
+.message-content-time-container {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 
 @media only screen and (max-width: 767px) {
     .chat-app .people-list {
