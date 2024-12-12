@@ -26,7 +26,7 @@
 
   </div>
   <app-notification [showNotification]="showNotification" [message]="messageNotification"
-  (closeNotification)="showNotification"></app-notification>
+    (closeNotification)="showNotification"></app-notification>
 
   <!-- Main Content -->
   <div class="container">
@@ -45,7 +45,9 @@
                 [ngClass]="{ active: user.key === currentUser }" (click)="switchChat(user.key)">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                 <div class="about">
-                  <div class="name">{{ user.key }}</div>
+                  <div class="name">{{ user.key }}
+                    <span *ngIf="user.value.unread > 0" class="unread-count">({{user.value.unread}})</span>
+                  </div>
                   <div class="status">
                     <i class="fa fa-circle"
                       [ngClass]="{'online': user.value.count > 0, 'offline': user.value.count === 0 }"></i>
