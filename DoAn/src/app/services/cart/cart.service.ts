@@ -18,16 +18,10 @@ export class ShoppingCartService {
   constructor(private tokenService: TokenService) {
     this.dbPromise = openDB('ShoppingCartDB', 1, {
       upgrade: (db) => {
-        debugger;
-        console.log(db.objectStoreNames);
-        if (!db.objectStoreNames.contains('shopping_cart_guest')) {
-          db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
-        }
-        // Tạo store cho người dùng nếu cần
-        const token = this.tokenService.getToken();
-        if (token && !db.objectStoreNames.contains(`shopping_cart_user`)) {
           db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
-        }
+          db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
+          
+        
       },
     });
   }
@@ -37,17 +31,8 @@ export class ShoppingCartService {
       upgrade: (db) => {
         debugger;
         const token = this.tokenService.getToken();
-        if (token!=null && !db.objectStoreNames.contains(`shopping_cart_user`)|| token!=null && !db.objectStoreNames.contains(`shopping_cart_guest`)) {
-          db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
-          db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
-        }
-
-        // console.log(db.objectStoreNames);
-        // if (!db.objectStoreNames.contains('shopping_cart_guest')) {
-        //   db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
-        // }
-        // Tạo store cho người dùng nếu cần
-        
+        db.createObjectStore(`shopping_cart_user`, { keyPath: 'id' });
+        db.createObjectStore('shopping_cart_guest', { keyPath: 'id' });
       },
     });
     await this.updateCartStore();
@@ -98,19 +83,19 @@ export class ShoppingCartService {
     if (!userId) {
       throw new Error("Người dùng chưa đăng nhập.");
     }
-  
+
     // Tạo khóa duy nhất cho sản phẩm dựa trên userId, productId và selectedSize
     const uniqueKey = `${userId}-${product.id}-${selectedSize}`;
-  
+
     // Kiểm tra sự tồn tại của sản phẩm với size đã chọn trong giỏ hàng
     const existingProduct = await db.get(this.cartStore, uniqueKey);
-  
+
     if (!existingProduct) {
       // Thêm sản phẩm vào giỏ hàng với size
-      const productWithSize = { 
-        ...product, 
-        id: uniqueKey, 
-        userId 
+      const productWithSize = {
+        ...product,
+        id: uniqueKey,
+        userId
       };
       await db.put(this.cartStore, productWithSize);
       this.updateCartStatus(); // Cập nhật trạng thái giỏ hàng
@@ -120,7 +105,7 @@ export class ShoppingCartService {
       );
     }
   }
-  
+
 
   async getCartItemById(productId: number, selectedSize: string): Promise<any | undefined> {
     const db = await this.dbPromise;
@@ -129,8 +114,8 @@ export class ShoppingCartService {
     const product = await db.get(this.cartStore, uniqueKey);
     return product || undefined;
   }
-  
-  
+
+
   // Xóa sản phẩm khỏi giỏ hàng
   async removeFromCart(productId: number): Promise<void> {
     const db = await this.dbPromise;
