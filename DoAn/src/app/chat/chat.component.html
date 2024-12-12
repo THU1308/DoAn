@@ -4,17 +4,22 @@
   </div>
 </div>
 
-
 <div class="chat-container" *ngIf="isChatOpen">
   <div class="wrapper">
     <div class="title">Simple Chatbot</div>
-    <div class="box">
-      <div class="item" *ngFor="let msg of messages" [ngClass]="{'right': msg.sender === currentUser, 'left': msg.sender !== currentUser}">
-        <div class="icon" >
+    <div class="box" #chatBox>
+      <div class="item" *ngFor="let msg of messages"
+        [ngClass]="{'right': msg.sender === currentUser, 'left': msg.sender !== currentUser}">
+        <div class="icon">
           <i class="fa fa-user"></i>
         </div>
-        <div class="msg">
-          <p>{{ msg.content }}</p>
+        <div style="display: flex; flex-direction: column;">
+          <div class="msg">
+            <p>{{ msg.content }}</p>
+          </div>
+          <div class="message-time" [ngClass]="{'my-message-time': msg.sender === 'admin'}">
+            {{ msg.timeStamp | date:'shortTime' }}
+          </div>
         </div>
       </div>
     </div>
@@ -27,3 +32,4 @@
     </div>
   </div>
 </div>
+```
