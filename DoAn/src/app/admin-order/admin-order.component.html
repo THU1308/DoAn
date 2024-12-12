@@ -11,7 +11,8 @@
 
     <!-- Sidebar -->
     <app-admin-slidebar></app-admin-slidebar>
-
+    <app-notification [showNotification]="showNotification" [message]="message"
+        (closeNotification)="showNotification"></app-notification>
     <!-- Main Content -->
     <div class="main-content">
         <!-- Topbar -->

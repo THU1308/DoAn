@@ -15,11 +15,13 @@ export class AdminOrderComponent implements OnInit {
   filteredOrders: Order[] = [];
   searchTerm: string = '';
   filterStatus: string = '';
-
+  showNotification: boolean = false;
+  isLoading: boolean = false;
+  message: string = '';
   constructor(
     private orderService: OrderService,
     private snackBar: MatSnackBar,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -59,14 +61,14 @@ export class AdminOrderComponent implements OnInit {
   editPaymentStatus(order: Order): void {
     this.orderService.updatePaymentStatus(order.id, order.paymentStatus).subscribe({
       next: (updatedOrder) => {
-        order.paymentStatus = updatedOrder.payment_status; 
+        order.paymentStatus = updatedOrder.payment_status;
         this.loadOrders()
         this.showSnackBar('Payment status updated!');
       },
       error: () => this.showSnackBar('Failed to update payment status!'),
     });
   }
-  
+
 
   deleteOrder(orderId: number): void {
     if (confirm('Are you sure you want to delete this order?')) {

@@ -5,5 +5,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-
+  showNotification: boolean = false;
+  isLoading: boolean = false;
+  message: string = '';
 }

@@ -11,8 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class WebSocketService {
   private client: Client;
-  private adminMessages$ = new BehaviorSubject<string[]>([]); 
-  private privateMessages$ = new BehaviorSubject<string[]>([]); 
+  private adminMessages$ = new BehaviorSubject<string[]>([]);
+  private privateMessages$ = new BehaviorSubject<string[]>([]);
   private currentUser: any = {
     username: '',
     role: '',
@@ -25,7 +25,7 @@ export class WebSocketService {
   ) {
     this.getCurrentUser();
     this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8088/ws'), 
+      webSocketFactory: () => new SockJS('http://localhost:8088/ws'),
       reconnectDelay: 5000,
 
       debug: (str) => {
@@ -62,11 +62,13 @@ export class WebSocketService {
       console.log('Received admin message:', message.body);
       try {
         // Lấy danh sách tin nhắn hiện tại
+        const msg: ChatMessage = JSON.parse(message.body);
+        this.newMessageReceived.emit({ ...msg });
         const currentMessages = this.privateMessages$.getValue();
-  
+
         // Thêm tin nhắn mới vào danh sách
         this.privateMessages$.next([...currentMessages, message.body]);
-  
+
       } catch (error) {
         console.error('Error parsing message body:', error);
       }
@@ -77,20 +79,20 @@ export class WebSocketService {
     this.client.subscribe('/topic/admin/chat', (message) => {
       const msg: ChatMessage = JSON.parse(message.body);
       // Phát tín hiệu tin nhắn mới
-      this.newMessageReceived.emit(msg); 
+      this.newMessageReceived.emit({ ...msg });
       try {
         // Lấy danh sách tin nhắn hiện tại
         const currentMessages = this.adminMessages$.getValue();
-  
+
         // Thêm tin nhắn mới vào danh sách
         this.adminMessages$.next([...currentMessages, message.body]);
-  
+
       } catch (error) {
         console.error('Error parsing message body:', error);
       }
     });
   }
-  
+
 
   // Gửi tin nhắn từ user
   sendMessage(chatMessage: ChatMessage): void {
@@ -122,9 +124,9 @@ export class WebSocketService {
     return this.currentUser.username;
   }
 
-   // Phương thức để lấy lịch sử trò chuyện
-   getChatHistory(userId: string): Observable<ChatMessage[]> {
+  // Phương thức để lấy lịch sử trò chuyện
+  getChatHistory(userId: string): Observable<ChatMessage[]> {
     return this.http.get<ChatMessage[]>(`http://localhost:8088/chat/history/${userId}`);
   }
-  
+
 }

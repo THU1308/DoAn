@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giao diện Admin - Web Bán Hàng Thời Trang</title>
- 
+
 </head>
+
 <body>
 
   <!-- Sidebar -->
   <app-admin-slidebar></app-admin-slidebar>
-
+  <app-notification [showNotification]="showNotification" [message]="message"
+    (closeNotification)="showNotification"></app-notification>
 
   <!-- Main Content -->
   <div class="main-content">
@@ -77,4 +80,5 @@
   </div>
 
 </body>
+
 </html>
