@@ -164,7 +164,7 @@ export class CheckOutComponent {
       subTotal: item.productPrice * item.productQuantity,
       sizeId: item.productSize ? item.productSize.id : null,
     }));
-    alert(JSON.stringify(this.order))
+    //alert(JSON.stringify(this.order))
     // Gửi yêu cầu tạo đơn hàng
     this.orderService.addOrder(this.order).subscribe({
       next: (response: any) => {
@@ -192,6 +192,7 @@ export class CheckOutComponent {
   processVNPayOrder(form: NgForm) {
     this.order = {
       ...this.order,
+      firstName: form.value.firstName,
       lastName: form.value.lastName,
       country: form.value.country,
       address: form.value.address,
@@ -203,6 +204,7 @@ export class CheckOutComponent {
       phone: form.value.phone,
       totalPrice: this.cartTotal,
       paymentStatus: this.selectedPaymentMethod,
+      username : this.currentUserNameLogin
     };
 
     // Cập nhật chi tiết đơn hàng
