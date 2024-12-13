@@ -104,9 +104,11 @@ export class HomeComponent implements OnInit {
     private imageService: ImageService,
     private sizeService: SizeService,
     private tokenService: TokenService,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    private webSocketService: WebSocketService
   ) {
     debugger
+    //this.webSocketService.registerChanel()
     this.cartService.updateCartStore()
     this.cartService.loadUserCart()
     this.suggestions$ = this.searchControl.valueChanges.pipe(
@@ -123,7 +125,6 @@ export class HomeComponent implements OnInit {
         }
       }),
     );
-
   }
 
   ngOnInit(): void {
@@ -131,7 +132,8 @@ export class HomeComponent implements OnInit {
     this.getListProducts();
     this.isLoading = true;
     this.getCategories();
-    //this.showNotification= true
+    this.webSocketService.getAdminMessages();
+    this.webSocketService.getPrivateMessages();
   }
 
   async getListProducts() {
@@ -277,21 +279,6 @@ export class HomeComponent implements OnInit {
       this.updateDisplayedProducts();
       this.changeDetectorRef.detectChanges();
     }
-
-    // debugger
-    // this.productService.sortProductsByPrice(this.sortTypeOrder).subscribe({
-    //   next: (response: any) => {
-    //     debugger
-    //     this.listProduct = response.data;
-    //     this.updateDisplayedProducts();
-    //     this.changeDetectorRef.detectChanges();
-    //     this.isLoading = false;
-    //   },
-    //   error: (error: any) => {
-    //     this.isLoading = false;
-    //     console.log(error);
-    //   },
-    // });
   }
 
   //Cart
@@ -386,14 +373,6 @@ export class HomeComponent implements OnInit {
     this.timeoutNotification(2000);
   }
 
-  // // Function to close the product details model
-  // closeProductDetailsModel() {
-  //   this.showProductDetailsModel = false;
-  //   this.selectedProduct = null;
-  //   this.selectedSize = null;
-  //   this.productQuantity = 1;
-  // }
-
   // Function to get sizes for the selected product
   getSize(product: ProductDetailDto) {
     this.sizeService.getSizeOfProduct(product.id).subscribe({
@@ -435,22 +414,5 @@ export class HomeComponent implements OnInit {
 
   public viewDetail(id: number) {
     this.router.navigate(['/product', id]);
-  }
-
-  // Pagination methods
-  goToPage(page: number) {
-    this.currentPage = page;
-    this.updateDisplayedProducts();
-    this.router.navigate(['/shop'], {
-      queryParams: { page: this.currentPage },
-    }); // Update URL
-  }
-
-  getPages(): number[] {
-    const pages: number[] = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
   }
 }

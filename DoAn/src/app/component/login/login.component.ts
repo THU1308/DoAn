@@ -4,6 +4,7 @@ import { UserService } from '../../services/user/user.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
 import { ShoppingCartService } from 'src/app/services/cart/cart.service';
+import { WebSocketService } from 'src/app/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-login',
@@ -40,10 +41,10 @@ export class LoginComponent {
         if (response.message === 'Success') {
           this.tokenService.setToken(response.data.token);
           debugger
-          alert('Đăng nhập thành công');
           this.cartService.initializeCartOnLogin()
           this.cartService.loadUserCart()
           this.router.navigate(['']);
+          alert('Đăng nhập thành công');
         } else {
           alert('Đăng nhập thất bại');
         }

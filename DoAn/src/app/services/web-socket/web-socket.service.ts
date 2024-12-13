@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, OnInit } from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ChatMessage } from 'src/app/dto/mesage.dto';
@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class WebSocketService {
+export class WebSocketService implements  OnInit{
   private client: Client;
   private adminMessages$ = new BehaviorSubject<string[]>([]);
   private privateMessages$ = new BehaviorSubject<string[]>([]);
@@ -34,6 +34,9 @@ export class WebSocketService {
     });
     this.registerChanel()
   }
+  ngOnInit(): void {
+    this.registerChanel();
+  }
 
   getCurrentUser() {
     this.userService.getCurrenUserLogin().subscribe({
@@ -51,7 +54,7 @@ export class WebSocketService {
       const token = this.getUser();
       if (this.currentUser.role == 'ROLE_ADMIN') {
         this.registerAdminChanel();
-      } else {
+      } if(this.currentUser.role == 'ROLE_USER') {
         this.registerUserChanel();
       }
     };
