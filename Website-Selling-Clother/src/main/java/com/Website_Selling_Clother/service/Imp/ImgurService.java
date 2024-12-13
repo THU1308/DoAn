@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
-@Service
+@Service("ImgurService")
 public class ImgurService {
 
     private final String clientId = "4044cd3d39f43d2";
