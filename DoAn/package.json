@@ -21,6 +21,8 @@
         "@angular/platform-browser-dynamic": "^16.2.0",
         "@angular/router": "^16.2.0",
         "@ng-bootstrap/ng-bootstrap": "^15.1.2",
+        "@ngx-translate/core": "^16.0.3",
+        "@ngx-translate/http-loader": "^16.0.0",
         "@stomp/ng2-stompjs": "^8.0.0",
         "@stomp/stompjs": "^7.0.0",
         "bootstrap": "^5.3.3",

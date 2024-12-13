@@ -70,7 +70,7 @@ export class PaymentResultComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Error creating order:', error);
-          alert('Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại.');
+          this.notification("Đơn hàng không thành công. Vui lòng thử lại sau.")
         },
       });
       // Xóa thông tin đơn hàng trong sessionStorage sau khi xử lý

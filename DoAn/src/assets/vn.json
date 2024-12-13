@@ -1,0 +1,46 @@
+{
+    "header": {
+      "free_shipping": "Miễn phí vận chuyển, hoàn trả hoặc đổi trả trong 30 ngày.",
+      "sign_out": "ĐĂNG XUẤT",
+      "sign_in": "ĐĂNG NHẬP",
+      "currency": "USD"
+    },
+    "navigation": {
+      "home": "Trang chủ",
+      "shop": "Cửa hàng",
+      "pages": "Trang",
+      "blog": "Blog",
+      "contacts": "Liên hệ"
+    },
+    "blog": {
+      "latest_new": "MỚI NHẤT",
+    "fashion_new_trends": "Xu hướng thời trang mới",
+    "read_more":"Xem thêm"
+    },
+    "product": {
+      "new": "Sản phẩm mới"
+    },
+    "breadcrumb": {
+      "home": "Trang chủ",
+      "shop": "Cửa hàng"
+    },
+    "footer": {
+      "customer_text": "Khách hàng là trọng tâm trong mô hình kinh doanh độc đáo của chúng tôi, bao gồm cả thiết kế.",
+       "shopping1_title": "MUA SẮM",
+      "clothing_store": "Cửa Hàng Quần Áo",
+      "trending_shoes": "Giày Dép Thịnh Hành",
+      "accessories": "Phụ Kiện",
+      "sale": "Giảm Giá",
+      "shopping2_title": "MUA SẮM",
+       "contact_us": "Liên Hệ",
+      "payment_methods": "Phương Thức Thanh Toán",
+      "delivery": "Vận Chuyển",
+      "return_exchanges": "Đổi Trả",
+      "newsletter_title": "BẢN TIN",
+      "newsletter_text": "Hãy là người đầu tiên biết về hàng mới, sách ảnh, khuyến mãi & giảm giá!",
+      "your_email_placeholder": "Email của bạn...",
+      "copyright": "Bản quyền © 2020 Bảo lưu mọi quyền",
+       "made_with": "Mẫu này được làm bằng 💖 bởi"
+  
+    }
+  }

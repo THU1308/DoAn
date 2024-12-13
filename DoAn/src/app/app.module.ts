@@ -14,7 +14,7 @@ import { ProductDetailsComponent } from './component/product-details/product-det
 import { BlogDetailsComponent } from './component/blog-details/blog-details.component';
 import { ContactComponent } from './component/contact/contact.component';
 import { LoginComponent } from './component/login/login.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from './interceptor/token.interceptor';
 import { VndCurrencyPipe } from './vnd-currency.pipe';
@@ -42,7 +42,13 @@ import { RevenueComponent } from './revenue/revenue.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { AdminChatComponent } from './admin-chat/admin-chat.component';
 import { AdminSlidebarComponent } from './admin-slidebar/admin-slidebar.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/', '.json');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,10 +96,17 @@ import { AdminSlidebarComponent } from './admin-slidebar/admin-slidebar.componen
     NgxPaginationModule,
     BaseChartDirective,
     MatSnackBarModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
-    {
+    { 
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true

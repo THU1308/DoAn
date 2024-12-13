@@ -1,0 +1,46 @@
+{
+    "header": {
+      "free_shipping": "Free shipping, 30-day return or refund guarantee.",
+      "sign_out": "SIGN OUT",
+      "sign_in": "SIGN OUT",
+      "currency": "USD"
+    },
+    "navigation": {
+      "home": "Home",
+      "shop": "Shop",
+      "pages": "Pages",
+      "blog": "Blog",
+      "contacts": "Contacts"
+    },
+    "blog": {
+      "latest_new": "LATEST NEW",
+    "fashion_new_trends": "Fashion New Trends",
+    "read_more":"read more"
+    },
+    "product": {
+      "new": "NEW"
+    },
+
+    "breadcrumb": {
+      "home": "Home",
+      "shop": "Shop"
+    },
+    "footer": {
+      "customer_text": "The customer is at the heart of our unique business model, which includes design.",
+       "shopping1_title": "SHOPPING",
+       "clothing_store": "Clothing Store",
+      "trending_shoes": "Trending Shoes",
+      "accessories": "Accessories",
+      "sale": "Sale",
+      "shopping2_title": "SHOPPING",
+      "contact_us": "Contact Us",
+      "payment_methods": "Payment Methods",
+      "delivery": "Delivery",
+      "return_exchanges": "Return & Exchanges",
+      "newsletter_title": "NEWSLETTER",
+      "newsletter_text": "Be the first to know about new arrivals, look books, sales & promos!",
+      "your_email_placeholder": "Your email...",
+      "copyright": "Copyright © 2020 All rights reserved",
+      "made_with": "This template is made with 💖 by"
+    }
+  }

@@ -25,7 +25,7 @@
 </head>
 
 <body>
-     <app-preloader [isLoading]="isLoading"></app-preloader> 
+    <app-preloader [isLoading]="isLoading"></app-preloader>
 
 
     <!-- Offcanvas Menu Begin -->
@@ -99,14 +99,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="filter__controls">
-                        <li class="active" data-filter="*">New</li>
+                        <li class="active" data-filter="*">{{'product.new' | translate}}</li>
                     </ul>
                 </div>
             </div>
             <div class="row product__filter">
                 <div *ngFor="let product of displayedProducts"
                     class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div  class="product__item">
+                    <div class="product__item">
                         <div (click)="viewDetail(product.id)" class="product__item__pic set-bg" [ngStyle]="{
                             'background-image': 'url(data:image/jpeg;base64,' + product.images[0].data + ')'
                         }">
@@ -175,11 +175,10 @@
                             <!-- Size Selection (if available) -->
                             <div class="product__details__option__size">
                                 <span>Size:</span>
-                                <label *ngFor="let size of selectedProduct?.productSize; let i = index" [for]="'size-' + i"
-                                    [ngClass]="{'active': selectedSize === size}">
+                                <label *ngFor="let size of selectedProduct?.productSize; let i = index"
+                                    [for]="'size-' + i" [ngClass]="{'active': selectedSize === size}">
                                     {{ size.name }}
-                                    <input type="radio" [id]="'size-' + i" [value]="size"
-                                        [(ngModel)]="selectedSize"> 
+                                    <input type="radio" [id]="'size-' + i" [value]="size" [(ngModel)]="selectedSize">
                                 </label>
                             </div>
 
@@ -199,15 +198,10 @@
             </div>
         </div>
     </div>
-
-
-
-
-
     <!-- Product Section End -->
 
     <!-- Categories Section Begin -->
-    <section class="categories spad">
+    <!-- <section class="categories spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
@@ -251,11 +245,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Categories Section End -->
 
     <!-- Instagram Section Begin -->
-    <section class="instagram spad">
+    <!-- <section class="instagram spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -290,7 +284,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- Instagram Section End -->
 
     <!-- Latest Blog Section Begin -->

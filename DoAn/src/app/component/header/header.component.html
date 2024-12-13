@@ -1,31 +1,3 @@
-<div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__option">
-            <div class="offcanvas__links">
-                <a href="#">Sign in</a>
-                <a href="#">FAQs</a>
-            </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
-                </ul>
-            </div>
-        </div>
-        <div class="offcanvas__nav__option"  (click)="$event.stopPropagation()">
-            <a class="search-switch"><img src="https://themewagon.github.io/malefashion/img/icon/search.png" alt=""></a>
-            <a ><img src="https://themewagon.github.io/malefashion/img/icon/heart.png" alt=""></a>
-            <a routerLink="/cart"><img src="https://themewagon.github.io/malefashion/img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__text">
-            <p>Free shipping, 30-day return or refund guarantee.</p>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
     <header class="header">
@@ -35,24 +7,23 @@
                     <div class="col-lg-6 col-md-7">
                         <div class="header__top__left">
                            
-                            <p>Free shipping, 30-day return or refund guarantee.</p>
+                            <p>{{'header.free_shipping' | translate}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a *ngIf="!checkLogin()" routerLink="/login">Sign in</a>
-                                <a *ngIf="checkLogin()" routerLink="/logout" (click)="logout()">Sign out</a>
-                                <a href="#">FAQs</a>
+                                <a *ngIf="!checkLogin()" routerLink="/login">{{'header.sign_in'|translate}}</a>
+                                <a *ngIf="checkLogin()" routerLink="/logout" (click)="logout()">{{'header.sign_out'|translate}}</a>
+                                <a *ngIf="checkLogin()" href="#">{{userName}}</a>
                             </div>
-                            <div class="header__top__hover">
+                            <!-- <div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
                                 <ul>
-                                    <li>USD</li>
-                                    <li>EUR</li>
-                                    <li>USD</li>
+                                    <li  (click)="changeLanguage('vn')">VietNamese</li>
+                                    <li  (click)="changeLanguage('en')"> English</li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -68,9 +39,9 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <li><a routerLink="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
+                            <li class="active"><a href="./index.html">{{'navigation.home'|translate}}</a></li>
+                            <li><a routerLink="/shop">{{'navigation.shop'|translate}}</a></li>
+                            <li><a href="#">{{'navigation.pages'|translate}}</a>
                                 <ul class="dropdown">
                                     <li><a href="./about.html">About Us</a></li>
                                     <li><a href="./shop-details.html">Shop Details</a></li>
@@ -79,8 +50,8 @@
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a routerLink="/blog-page">Blog</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
+                            <li><a routerLink="/blog-page">{{'navigation.blog'|translate}}</a></li>
+                            <li><a href="./contact.html">{{'navigation.contacts'|translate}}</a></li>
                         </ul>
                     </nav>
                 </div>

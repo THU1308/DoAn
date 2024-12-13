@@ -141,15 +141,4 @@ public class OrderController {
             return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
-    // Xóa mềm đơn hàng
-    @DeleteMapping("/{id}")
-    public ResponseData<?> deleteOrder(@PathVariable int id) {
-        try {
-            orderService.softDeleteOrder(id);
-            return new ResponseData<>(HttpStatus.OK, "Order deleted successfully");
-        } catch (Exception e) {
-            return new ResponseData<>(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
 }
