@@ -231,6 +231,7 @@ export class CheckOutComponent {
           this.message = 'Order không thành công. Vui lòng thử lại sau.';
           this.timeoutNotification(2000);
         }
+        this.cartService.clearCart();
       },
       error: (error: any) => {
         this.isLoading = false;
