@@ -16,14 +16,13 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class ChatController {
-
     private final SimpMessagingTemplate messagingTemplate;
     private RedisTemplate<String, ChatMessage> redisTemplate;
 
 
-    /**
-     * Xử lý user gửi tin nhắn tới admin
-     */
+      /**
+      * Xử lý user gửi tin nhắn tới admin
+      */
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatMessage chatMessage) {
         // Gửi tin nhắn đến kênh của admin
@@ -42,7 +41,7 @@ public class ChatController {
         String userId = chatMessage.getReceiver();
         chatMessage.setTimeStamp(LocalDateTime.now().toString());
         redisTemplate.opsForList().rightPush("chat_session:" + chatMessage.getReceiver(), chatMessage);
-        messagingTemplate.convertAndSend("/user/" + userId + "/queue/private", chatMessage);
+         messagingTemplate.convertAndSend("/user/" + userId + "/queue/private", chatMessage);
     }
 
     @GetMapping("/chat/history/{userId}")
