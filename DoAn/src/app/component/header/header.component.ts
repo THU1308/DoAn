@@ -17,6 +17,11 @@ export class HeaderComponent {
   cartQuantity$: BehaviorSubject<number> = new BehaviorSubject<number>(0); 
   cartTotal$: BehaviorSubject<number> = new BehaviorSubject<number>(0); 
   userName : string = '';
+  
+  currentUser : any = {
+    username : '',
+    role : ''
+  }
 
     constructor(
     private tokenService : TokenService,
@@ -48,7 +53,8 @@ export class HeaderComponent {
     this.userService.getCurrenUserLogin().subscribe({
       next: (res: any) => {
         debugger
-        this.userName = res.data.username;
+        this.currentUser.username = res.data.username;
+        this.currentUser.role = res.data.role.name;
       },
       error: (err) => console.error(err),
     });

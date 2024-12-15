@@ -153,6 +153,7 @@ export class AdminProductComponent {
               this.loadProducts();
               this.cancelEdit();
               this.notification('Cập nhật sản phẩm thành công!');
+              this.productForm.clearValidators
             },
             error: (err) => {
               console.error(err);

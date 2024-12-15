@@ -25,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -75,40 +76,6 @@ public class ProductController {
         return new ResponseData<>(HttpStatus.OK,"Success",productService.getListImageByProductId(productId));
     }
 
-//    @GetMapping("/category")
-//    public ResponseEntity<?> getProductByCategoryId(
-//            @RequestParam("categoryId") int categoryId,
-//            @RequestParam("page")     int page,
-//            @RequestParam("limit")    int limit,
-//            @RequestParam("sort")    String sort
-//    ) {
-//        PageRequest pageRequest;
-//        if(sort.equals("priceHight")){
-//            pageRequest = PageRequest.of(
-//                    page, limit,
-//                    Sort.by("price").ascending());
-//        }
-//        else if(sort.equals("idHight")){
-//            pageRequest = PageRequest.of(
-//                    page, limit,
-//                    Sort.by("id").ascending());
-//        }
-//        else {
-//            pageRequest = PageRequest.of(
-//                    page, limit,
-//                    Sort.by(sort).descending());
-//        }
-//        Page<Product> productPage = productService.getProductByCategoryId(categoryId,pageRequest);
-//        int totalPages = productPage.getTotalPages();
-//        List<Product> products = productPage.getContent();
-//        return ResponseEntity.ok(ProductCategoryResponse
-//                .builder()
-//                .categoryId(categoryId)
-//                .products(products)
-//                .totalPages(totalPages)
-//                .build());
-//    }
-
 
     @GetMapping("/{id}")
     public ResponseData<ProductDTO> getProductById(@PathVariable int id) {
@@ -150,37 +117,6 @@ public class ProductController {
 
         return new ResponseData<>(HttpStatus.OK, "Success", productDTOList);
     }
-
-
-//    @GetMapping("/price")
-//    public ResponseEntity<?> getListByPrice(){
-//        List<Product> list =productService.getListByPrice();
-//        List<ProductDTO> productDTOList = new ArrayList<>();
-//        for (var item:list) {
-//            ProductDTO productDTO = ProductDTO.fromProduct(item);
-//            Set<Integer> sizeIds = new HashSet<>();
-//            for (var item1: productSizeRepository.findAll()) {
-//                if(item1.getProduct().getId() == productDTO.getId()){
-//                    sizeIds.add(item1.getSize().getId());
-//                }
-//            }
-//            productDTO.setSizeIds(sizeIds);
-//            productDTOList.add(productDTO);
-//        }
-//        return ResponseEntity.ok(productDTOList);
-//    }
-
-//    @GetMapping("/related/{id}")
-//    public ResponseEntity<?> getListRelatedProduct(@PathVariable int id){
-//        List<Product> list = productService.findRelatedProduct(id);
-//        List<ProductDTO> productDTOList = new ArrayList<>();
-//        for (var item:list) {
-//            ProductDTO productDTO = ProductDTO.fromProduct(item);
-//            productDTOList.add(productDTO);
-//        }
-//        return ResponseEntity.ok(productDTOList);
-//    }
-
     @GetMapping("/category/{id}")
     public ResponseData<List<Product>> getListProductByCategory(@PathVariable int id) {
         List<Product> list = productService.findAllByCategoryId(id);
@@ -214,21 +150,13 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
             Product product = productService.createProduct(productDTO);
-            if (product.getCategory().getId() != 3) {
-                for (int i = 1; i <= 4; i++) {
-                    ProductSize productSize = new ProductSize();
-                    productSize.setProduct(product);
-                    Size size = sizeRepository.findById(i).orElseThrow();
-                    productSize.setSize(size);
-                    productSize.setQuantity((Integer) ProductSize.getRandomQuantity(20, 300));
-                    productSizeRepository.save(productSize);
-                }
-            } else {
+            List<Integer> listSize = productDTO.getSizeIds().stream().toList();
+            for (int i = 0; i < listSize.size(); i++) {
                 ProductSize productSize = new ProductSize();
                 productSize.setProduct(product);
-                Size size = sizeRepository.findById(5).orElseThrow();
+                Size size = sizeRepository.findById(listSize.get(i)).orElseThrow();
                 productSize.setSize(size);
-                productSize.setQuantity((Integer) ProductSize.getRandomQuantity(20, 300));
+                productSize.setQuantity(0);
                 productSizeRepository.save(productSize);
             }
             return ResponseEntity.ok(ProductDTO.fromProduct(product));
@@ -241,10 +169,33 @@ public class ProductController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')")
     public ResponseEntity<?> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
         try {
+            // 1. Cập nhật sản phẩm
             Product product = productService.updateProduct(id, productDTO);
+
+            // 2. Xóa các ProductSize cũ
+            List<ProductSize> oldProductSizes = productSizeRepository.findByProductId(product.getId());
+            productSizeRepository.deleteAll(oldProductSizes);
+
+            // 3. Tạo và lưu ProductSize mới
+            List<Integer> sizeIds = productDTO.getSizeIds().stream().toList();
+            List<ProductSize> newProductSizes = sizeIds.stream()
+                    .map(sizeId -> {
+                        Size size = sizeRepository.findById(sizeId).orElse(null);
+                        if(size == null){
+                            throw new RuntimeException("Size with id: " + sizeId + " not found");
+                        }
+                        ProductSize productSize = new ProductSize();
+                        productSize.setProduct(product);
+                        productSize.setSize(size);
+                        //productSize.setQuantity(0);
+                        return productSize;
+                    })
+                    .collect(Collectors.toList());
+            productSizeRepository.saveAll(newProductSizes);
+            // 4. Trả về ProductDTO
             return ResponseEntity.ok(ProductDTO.fromProduct(product));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

@@ -50,9 +50,9 @@
                         <button (click)="switchUserStatus(user)" class="btn-switch">
                             {{ user.enable ? 'Disable' : 'Enable' }}
                         </button>
-                        <button (click)="showEditForm(user)" class="btn-edit">Edit</button>
-                        <button (click)="showUpdateRoleForm(user)" class="btn-update-role">Update Role</button>
-                        <button (click)="showResetPasswordForm(user)" class="btn-reset-password">Reset Password</button>
+                        <button (click)="showEditForm(user)" class="btn-edit">Sửa</button>
+                        <!-- <button (click)="showUpdateRoleForm(user)" class="btn-update-role">Update Role</button> -->
+                        <button (click)="showResetPasswordForm(user)" class="btn-reset-password">Reset Mật Khẩu</button>
                     </td>
                 </tr>
             </tbody>
@@ -92,7 +92,7 @@
                     <label for="phone" class="form-label">Phone</label>
                     <input id="phone" [(ngModel)]="selectedUser.phone" name="phone" class="form-input" required>
                 </div>
-                <button type="submit" class="btn-submit">Save</button>
+                <button type="submit" class="btn-submit">Lưu</button>
             </form>
         </div>
 
@@ -103,7 +103,7 @@
             <h3>Reset Password</h3>
             <input [(ngModel)]="usernameToResetPassword" placeholder="Enter username to reset password"
                 class="form-input" />
-            <button (click)="resetPassword()" class="btn-reset-password">Reset Password</button>
+            <button (click)="resetPassword()" class="btn-reset-password">Reset Mật Khẩu</button>
         </div>
 
         <!-- Update Role -->
